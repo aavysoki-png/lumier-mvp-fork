@@ -72,7 +72,7 @@ export default function QuestionPage() {
       className="flex min-h-screen flex-col" style={{ background: 'var(--bg-base)' }}>
 
       <div className="flex items-center justify-between px-5 pt-14">
-        <p className="font-serif text-xl font-light" style={{ color: 'var(--text-primary)', letterSpacing: '0.04em' }}>Lumina</p>
+        <p className="font-serif text-xl font-light" style={{ color: 'var(--text-primary)', letterSpacing: '0.04em' }}>Lumier</p>
         <Link href="/insights" className="label-overline transition-opacity hover:opacity-60" style={{ color: 'var(--text-muted)' }}>
           Insights
         </Link>

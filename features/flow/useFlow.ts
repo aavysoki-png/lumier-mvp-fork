@@ -41,7 +41,7 @@ const STEP_GUARDS: Partial<Record<FlowStep, FlowStep[]>> = {
   'result':          ['onboarding', 'question', 'readers', 'checkout', 'session-format'],
 }
 
-const FLOW_KEY = 'lumina-flow'
+const FLOW_KEY = 'Lumier-flow'
 
 function readFlow(): FlowStep[] {
   try {

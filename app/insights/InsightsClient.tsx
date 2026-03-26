@@ -43,7 +43,7 @@ export function InsightsClient({ insights }: Props) {
           >
             ← Home
           </button>
-          <p className="font-serif text-sm font-light text-stone-600">Lumina</p>
+          <p className="font-serif text-sm font-light text-stone-600">Lumier</p>
         </div>
 
         <div className="space-y-2">

@@ -74,7 +74,7 @@ export default function OnboardingPage() {
       <div className="relative px-6 pt-14">
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }}>
           <p className="font-serif text-lg font-light" style={{ color: 'var(--text-primary)', letterSpacing: '0.04em' }}>
-            Lumina
+            Lumier
           </p>
           <div className="mt-1.5" style={{ height: 1, width: 24, background: 'var(--gold)' }} />
         </motion.div>

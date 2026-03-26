@@ -47,7 +47,7 @@ const emptyQuestion: QuestionState = { id: null, text: null, category: null }
 const emptyReader: ReaderContext = { id: null, name: null, specialization: null, price: null, tier: null }
 const emptySession: SessionContext = { id: null, orderId: null, type: null }
 
-const STORAGE_KEY = 'lumina-app-state'
+const STORAGE_KEY = 'Lumier-app-state'
 
 // Read from localStorage manually — only called client-side
 function readStorage(): Partial<AppStore> {

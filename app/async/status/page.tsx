@@ -113,7 +113,7 @@ export default function AsyncStatusPage() {
       {/* Header */}
       <div className="relative px-6 pt-12 pb-8">
         <p className="font-serif text-lg font-light" style={{ color: 'var(--text-primary)', letterSpacing: '0.04em' }}>
-          Lumina
+          Lumier
         </p>
         <div className="mt-1.5" style={{ height: 1, width: 24, background: 'var(--gold)' }} />
       </div>

@@ -18,7 +18,7 @@ const jost = Jost({
 })
 
 export const metadata: Metadata = {
-  title: 'Lumina — Tarot Consultation',
+  title: 'Lumier — Tarot Consultation',
   description: 'Premium tarot consultation. Live and async sessions with master readers.',
 }
 

@@ -92,7 +92,7 @@ Instead of "Will I get the job?" consider: "What do I need to understand about t
 
 Instead of "Does he love me?" try: "What am I not seeing clearly about this relationship dynamic?"
 
-This reframe isn't semantic. It fundamentally changes what you're asking the cards to illuminate. Outcome questions request a verdict. Insight questions request a mirror.
+This reframe isn't semantic. It fundamentally changes what you're asking the cards to ilLumierte. Outcome questions request a verdict. Insight questions request a mirror.
 
 **The zone of productive uncertainty**
 

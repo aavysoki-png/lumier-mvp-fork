@@ -1,4 +1,4 @@
-# Lumina — Tarot Consultation MVP
+# Lumier — Tarot Consultation MVP
 
 A premium tarot consultation web app built with Next.js 14, TypeScript, Tailwind CSS, Framer Motion, Prisma, and PostgreSQL.
 

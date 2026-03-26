@@ -111,7 +111,7 @@ export default function ResultPage() {
       <div className="sticky top-0 z-10 glass" style={{ borderBottom: '1px solid var(--border-subtle)' }}>
         <div className="mx-auto max-w-xl flex items-center justify-between px-6 py-4">
           <p className="font-serif text-base font-light" style={{ color: 'var(--text-primary)', letterSpacing: '0.04em' }}>
-            Lumina
+            Lumier
           </p>
           <Link href="/insights"
             className="label-overline transition-opacity hover:opacity-60"
