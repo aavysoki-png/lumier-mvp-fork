@@ -1,0 +1,147 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Design tokens ──────────────────────────────────────────────────────── */
+:root {
+  /* Surfaces */
+  --bg-base:      #FDFCF8;
+  --bg-raised:    #FAF7F0;
+  --bg-float:     #FFFFFF;
+  /* Accent */
+  --gold:         #C4964A;
+  --gold-light:   #D4AF78;
+  --gold-subtle:  #F0E6D3;
+  /* Text */
+  --text-primary:   #1E1A18;
+  --text-secondary: #6B6259;
+  --text-muted:     #B5ADA4;
+  /* Border */
+  --border-subtle:  #EDE8E2;
+  --border-default: #DDD5CC;
+}
+
+/* ─── Base ───────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  background-color: var(--bg-base);
+  overscroll-behavior: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+* { -webkit-tap-highlight-color: transparent; }
+
+/* ─── Scrollbar ──────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 2px; height: 2px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #D4AF7833; border-radius: 4px; }
+.scrollbar-none { scrollbar-width: none; -ms-overflow-style: none; }
+.scrollbar-none::-webkit-scrollbar { display: none; }
+
+/* ─── Selection ──────────────────────────────────────────────────────────── */
+::selection { background: #C4964A22; color: var(--text-primary); }
+
+/* ─── Safe areas ─────────────────────────────────────────────────────────── */
+.safe-bottom { padding-bottom: max(env(safe-area-inset-bottom, 0px), 20px); }
+.safe-top    { padding-top: max(env(safe-area-inset-top, 0px), 0px); }
+
+/* ─── Typography helpers ─────────────────────────────────────────────────── */
+.font-serif { font-feature-settings: "kern" 1, "liga" 1, "calt" 1, "onum" 1; }
+
+/* Overline label — use for section labels */
+.label-overline {
+  font-family: var(--font-jost);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* ─── Reading prose ──────────────────────────────────────────────────────── */
+.reading-prose p {
+  font-family: var(--font-jost);
+  font-size: 0.9375rem;
+  line-height: 1.85;
+  color: #4A4340;
+  margin-bottom: 1.1rem;
+}
+.reading-prose strong {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.reading-prose em {
+  font-style: italic;
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+}
+.reading-prose .card-heading {
+  font-family: var(--font-cormorant);
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+.reading-prose .card-position {
+  font-family: var(--font-jost);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.25rem;
+}
+.reading-prose hr {
+  border: none;
+  margin: 2rem 0;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.reading-prose hr::before,
+.reading-prose hr::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border-subtle);
+}
+.reading-prose hr::after {
+  content: '✦';
+  font-size: 10px;
+  color: var(--gold-light);
+  flex: 0;
+}
+
+/* ─── Shimmer loading ────────────────────────────────────────────────────── */
+.shimmer {
+  background: linear-gradient(90deg, #f0ebe3 25%, #f8f4ed 50%, #f0ebe3 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.8s linear infinite;
+}
+
+/* ─── Glass surface ──────────────────────────────────────────────────────── */
+.glass {
+  background: rgba(253, 252, 248, 0.92);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+}
+
+/* ─── Consultation bubble (reader) ──────────────────────────────────────── */
+.bubble-reader {
+  background: #FFFFFF;
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+.bubble-user {
+  background: var(--text-primary);
+  color: #FAF7F0;
+}
+
+/* ─── Gold line accent ───────────────────────────────────────────────────── */
+.gold-rule {
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold-light), transparent);
+}
