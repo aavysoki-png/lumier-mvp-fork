@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { getReaders } from '@/server/actions'
 import { ReadersClient } from './ReadersClient'
 

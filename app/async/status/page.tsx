@@ -1,5 +1,7 @@
 'use client'
 
+export const dynamic = 'force-dynamic'
+
 import { useEffect, useState, useCallback, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence, useMotionValue, useTransform, animate } from 'framer-motion'
@@ -45,7 +47,7 @@ const STAGE_COPY: Record<StatusType, { headline: string; sub: string; body: stri
   PENDING: {
     headline: 'Your request has been received',
     sub: 'Awaiting your reader',
-    body: "Your question is in the hands of your reader. They'll begin when they're ready to give it proper attention.",
+    body: 'Your question is in the hands of your reader. They'll begin when they're ready to give it proper attention.',
   },
   IN_PROGRESS: {
     headline: 'Your reading is being written',
