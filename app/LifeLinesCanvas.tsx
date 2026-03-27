@@ -82,15 +82,7 @@ function segmentIntersection(
   return { x: ax + t * dxAB, y: ay + t * dyAB }
 }
 
-export function LifeLinesCanvas() {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return
-
+function run(cv: HTMLCanvasElement, ctx: CanvasRenderingContext2D): () => void {
     let W = 0, H = 0
     let raf: number
     let frame = 0
@@ -99,8 +91,8 @@ export function LifeLinesCanvas() {
     let events: LifeEvent[] = []
 
     function resize() {
-      W = canvas.width  = window.innerWidth
-      H = canvas.height = window.innerHeight
+      W = window.innerWidth;  cv.width  = W
+      H = window.innerHeight; cv.height = H
     }
     resize()
     window.addEventListener('resize', resize)
@@ -280,6 +272,17 @@ export function LifeLinesCanvas() {
       cancelAnimationFrame(raf)
       window.removeEventListener('resize', resize)
     }
+}
+
+export function LifeLinesCanvas() {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+
+  useEffect(() => {
+    const cv = canvasRef.current
+    if (!cv) return
+    const ctx = cv.getContext('2d')
+    if (!ctx) return
+    return run(cv, ctx)
   }, [])
 
   return (
