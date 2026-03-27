@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { dur, ease } from '@/shared/animations/variants'
+import { LifeLinesCanvas } from './LifeLinesCanvas'
 
 export default function SplashPage() {
   const router = useRouter()
@@ -12,6 +13,9 @@ export default function SplashPage() {
       className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden"
       style={{ background: 'var(--bg-base)' }}
     >
+      {/* Life lines background */}
+      <LifeLinesCanvas />
+
       {/* Ambient glow */}
       <motion.div
         initial={{ opacity: 0, scale: 0.6 }}
