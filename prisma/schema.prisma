@@ -23,6 +23,7 @@ model User {
   sessions      Session[]
   orders        Order[]
   readerProfile TarotReader?
+  articles      InsightArticle[]
 }
 
 enum UserRole {
@@ -120,7 +121,11 @@ model InsightArticle {
   content   String
   category  String   @default("general")
   readTime  Int      @default(5)
+  published Boolean  @default(false)
+  authorId  String?
+  author    User?    @relation(fields: [authorId], references: [id])
   createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 // ─── Enums ────────────────────────────────────────────────────────────────────

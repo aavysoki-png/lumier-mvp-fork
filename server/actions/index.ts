@@ -129,11 +129,18 @@ export async function sendReaderGreeting(sessionId: string, readerName: string) 
 
 export async function getInsights() {
   return prisma.insightArticle.findMany({
+    where: { published: true },
     orderBy: { createdAt: 'desc' },
-    select: { id: true, title: true, preview: true, category: true, readTime: true, createdAt: true },
+    select: {
+      id: true, title: true, preview: true, category: true, readTime: true, createdAt: true,
+      author: { select: { name: true } },
+    },
   })
 }
 
 export async function getInsightById(id: string) {
-  return prisma.insightArticle.findUnique({ where: { id } })
+  return prisma.insightArticle.findUnique({
+    where: { id },
+    include: { author: { select: { name: true } } },
+  })
 }
