@@ -140,7 +140,7 @@ export default function QuestionPage() {
       <div className="px-5 pb-10 pt-4 safe-bottom">
         <Button onClick={handleSubmit} loading={loading} fullWidth size="lg"
           disabled={text.trim().length < 10 || !category}>
-          Найти моего читателя
+          Найти моего консультанта
         </Button>
       </div>
     </motion.div>

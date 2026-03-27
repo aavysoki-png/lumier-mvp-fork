@@ -122,7 +122,7 @@ export default function OnboardingPage() {
                 className="font-sans text-sm leading-relaxed mb-10"
                 style={{ color: 'var(--text-secondary)' }}
               >
-                Ваше имя помогает читателю выстроить связь с вами — не только с вашим вопросом.
+                Ваше имя помогает консультанту выстроить связь с вами — не только с вашим вопросом.
               </motion.p>
               <motion.div variants={revealNormal}>
                 <Input
@@ -160,7 +160,7 @@ export default function OnboardingPage() {
                 className="font-sans text-sm leading-relaxed mb-10"
                 style={{ color: 'var(--text-secondary)' }}
               >
-                Дата рождения задаёт астрологический контекст, на который опирается ваш читатель.
+                Дата рождения задаёт астрологический контекст, на который опирается ваш Консультант.
               </motion.p>
               <motion.div variants={revealNormal}>
                 <Input

@@ -44,24 +44,24 @@ const DEMO_RESULT = `**Ваш расклад: На перепутье**
 const STAGE_COPY: Record<StatusType, { headline: string; sub: string; body: string }> = {
   PENDING: {
     headline: 'Ваш запрос получен',
-    sub: 'Ожидание читателя',
-    body: 'Ваш вопрос в руках читателя. Он приступит к работе, когда будет готов уделить ему должное внимание.',
+    sub: 'Ожидание консультанта',
+    body: 'Ваш вопрос в руках консультанта. Он приступит к работе, когда будет готов уделить ему должное внимание.',
   },
   IN_PROGRESS: {
     headline: 'Ваш расклад создаётся',
-    sub: 'Читатель с вашим вопросом',
-    body: 'Это вдумчивый процесс. Ваш читатель медитирует над вопросом, тянет карты и составляет ответ — специально для вас.',
+    sub: 'Консультант с вашим вопросом',
+    body: 'Это вдумчивый процесс. Ваш Консультант медитирует над вопросом, тянет карты и составляет ответ — специально для вас.',
   },
   COMPLETED: {
     headline: 'Ваш расклад готов',
     sub: 'Ответ завершён',
-    body: 'Ваш читатель завершил личный расклад. Не торопитесь с ним.',
+    body: 'Ваш Консультант завершил личный расклад. Не торопитесь с ним.',
   },
 }
 
 const STEPS = [
-  { key: 'PENDING',     label: 'Вопрос получен',       detail: 'Доставлен вашему читателю' },
-  { key: 'IN_PROGRESS', label: 'Расклад создаётся',    detail: 'Читатель работает над ответом' },
+  { key: 'PENDING',     label: 'Вопрос получен',       detail: 'Доставлен вашему консультанту' },
+  { key: 'IN_PROGRESS', label: 'Расклад создаётся',    detail: 'Консультант работает над ответом' },
   { key: 'COMPLETED',   label: 'Расклад готов',         detail: 'Доступен для просмотра' },
 ] as const
 
@@ -197,7 +197,7 @@ export default function AsyncStatusPage() {
           </div>
         </div>
 
-        {/* Карточка читателя */}
+        {/* Карточка консультанта */}
         <motion.div variants={revealNormal} initial="hidden" animate="visible"
           className="mb-6 rounded-xl p-5"
           style={{ background: 'var(--bg-float)', border: '1px solid var(--border-subtle)', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
@@ -236,7 +236,7 @@ export default function AsyncStatusPage() {
                 />
               </div>
               <p className="mt-1.5 font-sans text-xs" style={{ color: 'var(--text-muted)' }}>
-                {status === 'IN_PROGRESS' ? 'Расклад в процессе…' : 'Ожидание читателя'}
+                {status === 'IN_PROGRESS' ? 'Расклад в процессе…' : 'Ожидание консультанта'}
               </p>
             </div>
           )}

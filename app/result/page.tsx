@@ -133,7 +133,7 @@ export default function ResultPage() {
                     {reader.name?.charAt(0) ?? 'Ч'}
                   </div>
                   <p className="font-sans text-xs" style={{ color: 'var(--text-muted)' }}>
-                    Читатель: {reader.name ?? 'Ваш читатель'} · {new Date().toLocaleDateString('ru-RU', { month: 'long', day: 'numeric', year: 'numeric' })}
+                    Консультант: {reader.name ?? 'Ваш Консультант'} · {new Date().toLocaleDateString('ru-RU', { month: 'long', day: 'numeric', year: 'numeric' })}
                   </p>
                 </motion.div>
                 <motion.div variants={revealSubtle} className="mt-8 gold-rule" />

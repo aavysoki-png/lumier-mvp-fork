@@ -90,7 +90,7 @@ export default function ChatPage() {
   }
 
   const initial = reader.name?.charAt(0) ?? 'Ч'
-  const firstName = reader.name?.split(' ')[0] ?? 'Читатель'
+  const firstName = reader.name?.split(' ')[0] ?? 'Консультант'
 
   return (
     <div className="flex h-[100dvh] flex-col" style={{ background: 'var(--bg-base)' }}>
@@ -113,7 +113,7 @@ export default function ChatPage() {
           </div>
           <div className="flex-1 min-w-0">
             <p className="font-serif text-base font-medium truncate" style={{ color: 'var(--text-primary)', lineHeight: 1.2 }}>
-              {reader.name ?? 'Ваш читатель'}
+              {reader.name ?? 'Ваш Консультант'}
             </p>
             <p className="font-sans text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
               {reader.specialization ?? 'Сессия активна'}
