@@ -1,62 +1,69 @@
 'use client'
+
 import { useEffect, useState, useCallback, useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import { motion, AnimatePresence, useMotionValue, useTransform, animate } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { getAsyncStatus, completeAsyncReading } from '@/server/actions'
 import { useAppStore } from '@/shared/lib/store'
 import { Button } from '@/shared/ui/Button'
-import { pageIn, staggerNormal, revealNormal, revealSubtle, dur, ease } from '@/shared/animations/variants'
+import { pageIn, revealNormal, revealSubtle, dur, ease } from '@/shared/animations/variants'
 import Link from 'next/link'
 
 type StatusType = 'PENDING' | 'IN_PROGRESS' | 'COMPLETED'
 
-const DEMO_RESULT = `**Your Reading: The Crossroads**
+const DEMO_RESULT = `**Ваш расклад: На перепутье**
 
-*Three cards were drawn for your question.*
-
----
-
-**Position 1 — Where You Stand: The Eight of Pentacles**
-
-You have built real competency in your current role. This card confirms what you likely already sense: you are not leaving because you have failed here. You have genuinely mastered something. The Eight of Pentacles asks you to honor that foundation before stepping forward.
+*Для вашего вопроса были вытянуты три карты.*
 
 ---
 
-**Position 2 — What You Are Moving Toward: The Fool**
+**Позиция 1 — Где вы стоите: Восьмёрка Пентаклей**
 
-The Fool is the card of genuine new beginnings. Its appearance suggests that the uncertainty you named is not a problem to solve before you proceed — it is the nature of the threshold itself.
-
-What you are being invited into is not a clear path. It is a genuine opening.
+Вы создали подлинное мастерство на своём нынешнем месте. Эта карта подтверждает то, что вы, вероятно, уже чувствуете: вы уходите не потому, что потерпели здесь поражение. Вы действительно овладели чем-то важным. Восьмёрка Пентаклей просит вас признать этот фундамент, прежде чем шагнуть вперёд.
 
 ---
 
-**Position 3 — What This Transition Requires: The High Priestess**
+**Позиция 2 — Куда вы движетесь: Шут**
 
-The High Priestess asks you to listen more deeply to what you already know, before reaching for external validation. She asks: what do you know, in the part of you that doesn't need to be convinced?
+Шут — карта подлинных новых начинаний. Его появление здесь говорит о том, что неопределённость, которую вы назвали в своём вопросе — это не проблема, которую нужно решить перед тем, как действовать. Это сама природа порога.
+
+То, к чему вас приглашают — не чёткий путь. Это подлинное открытие.
 
 ---
 
-**In Summary**
+**Позиция 3 — Что требует этот переход: Верховная Жрица**
 
-You have the foundation. The opportunity is real. What stands between you and stepping into it is not information — it is the permission you have not yet fully given yourself.`
+Верховная Жрица просит вас прислушаться глубже к тому, что вы уже знаете — прежде чем обращаться за внешним подтверждением. Она спрашивает: что вы знаете в той части себя, которой не нужно быть убеждённой?
+
+---
+
+**В итоге**
+
+Фундамент у вас есть. Возможность реальна. Единственное, что стоит между вами и следующим шагом — это не информация. Это разрешение, которое вы ещё не дали себе полностью.`
 
 const STAGE_COPY: Record<StatusType, { headline: string; sub: string; body: string }> = {
   PENDING: {
-    headline: 'Your request has been received',
-    sub: 'Awaiting your reader',
-    body: 'Your question is in the hands of your reader. They will begin when ready to give it proper attention.',
+    headline: 'Ваш запрос получен',
+    sub: 'Ожидание читателя',
+    body: 'Ваш вопрос в руках читателя. Он приступит к работе, когда будет готов уделить ему должное внимание.',
   },
   IN_PROGRESS: {
-    headline: 'Your reading is being written',
-    sub: 'Reader is with your question',
-    body: 'This is a considered process. Your reader is sitting with your question, drawing cards, and composing a response crafted specifically for you.',
+    headline: 'Ваш расклад создаётся',
+    sub: 'Читатель с вашим вопросом',
+    body: 'Это вдумчивый процесс. Ваш читатель медитирует над вопросом, тянет карты и составляет ответ — специально для вас.',
   },
   COMPLETED: {
-    headline: 'Your reading is ready',
-    sub: 'Response complete',
-    body: 'Your reader has completed your personal reading. Take your time with it.',
+    headline: 'Ваш расклад готов',
+    sub: 'Ответ завершён',
+    body: 'Ваш читатель завершил личный расклад. Не торопитесь с ним.',
   },
 }
+
+const STEPS = [
+  { key: 'PENDING',     label: 'Вопрос получен',       detail: 'Доставлен вашему читателю' },
+  { key: 'IN_PROGRESS', label: 'Расклад создаётся',    detail: 'Читатель работает над ответом' },
+  { key: 'COMPLETED',   label: 'Расклад готов',         detail: 'Доступен для просмотра' },
+] as const
 
 export default function AsyncStatusPage() {
   const router = useRouter()
@@ -84,7 +91,6 @@ export default function AsyncStatusPage() {
     return () => { if (pollRef.current) clearInterval(pollRef.current) }
   }, [checkStatus])
 
-  // Auto-complete after 18s for demo
   useEffect(() => {
     if (!readingId || status === 'COMPLETED' || autoCompleted.current) return
     const t = setTimeout(async () => {
@@ -102,7 +108,6 @@ export default function AsyncStatusPage() {
     <motion.div variants={pageIn} initial="hidden" animate="visible"
       className="flex min-h-screen flex-col" style={{ background: 'var(--bg-base)' }}>
 
-      {/* Ambient gradient that intensifies with progress */}
       <motion.div
         animate={{ opacity: status === 'COMPLETED' ? 1 : 0.5 }}
         transition={{ duration: 1.2 }}
@@ -110,7 +115,6 @@ export default function AsyncStatusPage() {
         style={{ background: 'radial-gradient(ellipse 80% 60% at 50% -10%, rgba(196,150,74,0.08), transparent)' }}
       />
 
-      {/* Header */}
       <div className="relative px-6 pt-12 pb-8">
         <p className="font-serif text-lg font-light" style={{ color: 'var(--text-primary)', letterSpacing: '0.04em' }}>
           Lumier
@@ -119,7 +123,6 @@ export default function AsyncStatusPage() {
       </div>
 
       <div className="relative flex-1 px-6">
-        {/* Status indicator + headline */}
         <AnimatePresence mode="wait">
           <motion.div key={status}
             initial={{ opacity: 0, y: 10 }}
@@ -141,20 +144,67 @@ export default function AsyncStatusPage() {
           </motion.div>
         </AnimatePresence>
 
-        {/* Three-stage progress */}
+        {/* Этапы */}
         <div className="mb-8">
-          <StageProgress currentIndex={stageIndex} status={status} readerName={reader.name} />
+          <div className="space-y-px">
+            {STEPS.map((step, i) => {
+              const done = i < stageIndex
+              const active = i === stageIndex
+              return (
+                <motion.div key={step.key}
+                  initial={{ opacity: 0, x: -12 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.1, duration: dur.normal, ease: ease.outSoft }}
+                  className="flex items-center gap-4 py-3.5">
+                  <div className="relative flex flex-col items-center" style={{ width: 32 }}>
+                    <motion.div
+                      animate={{
+                        background: done ? 'var(--gold)' : active ? 'var(--text-primary)' : 'var(--bg-raised)',
+                        borderColor: done || active ? 'transparent' : 'var(--border-default)',
+                      }}
+                      transition={{ duration: 0.5 }}
+                      className="flex h-8 w-8 items-center justify-center rounded-xl border font-sans text-xs font-medium"
+                      style={{ color: done || active ? 'white' : 'var(--text-muted)' }}
+                    >
+                      {done ? (
+                        <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 500 }}>
+                          ✓
+                        </motion.span>
+                      ) : i + 1}
+                    </motion.div>
+                    {i < STEPS.length - 1 && (
+                      <div className="mt-1" style={{ width: 1, height: 16, background: done ? 'var(--gold-light)' : 'var(--border-subtle)' }} />
+                    )}
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-sans text-sm"
+                      style={{ color: active ? 'var(--text-primary)' : done ? 'var(--text-secondary)' : 'var(--text-muted)', fontWeight: active ? 500 : 400 }}>
+                      {step.label}
+                    </p>
+                    {(done || active) && (
+                      <motion.p
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        className="font-sans text-xs mt-0.5"
+                        style={{ color: 'var(--text-muted)' }}>
+                        {step.detail}
+                      </motion.p>
+                    )}
+                  </div>
+                </motion.div>
+              )
+            })}
+          </div>
         </div>
 
-        {/* Reader context card */}
-        <motion.div
-          variants={revealNormal} initial="hidden" animate="visible"
+        {/* Карточка читателя */}
+        <motion.div variants={revealNormal} initial="hidden" animate="visible"
           className="mb-6 rounded-xl p-5"
           style={{ background: 'var(--bg-float)', border: '1px solid var(--border-subtle)', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 mb-4">
             <div className="h-10 w-10 rounded-xl flex items-center justify-center font-serif text-sm"
               style={{ background: 'var(--bg-raised)', color: 'var(--text-secondary)' }}>
-              {reader.name?.charAt(0) ?? 'R'}
+              {reader.name?.charAt(0) ?? 'Ч'}
             </div>
             <div className="flex-1 min-w-0">
               <p className="font-serif text-base" style={{ color: 'var(--text-primary)' }}>{reader.name}</p>
@@ -169,20 +219,30 @@ export default function AsyncStatusPage() {
                   className="h-1.5 w-1.5 rounded-full"
                   style={{ background: 'var(--gold)' }}
                 />
-                <p className="font-sans text-xs" style={{ color: 'var(--gold)' }}>Writing</p>
+                <p className="font-sans text-xs" style={{ color: 'var(--gold)' }}>Работает</p>
               </div>
             )}
           </div>
 
-          {/* Progress bar — only when in progress */}
           {status !== 'COMPLETED' && (
-            <div className="mt-4">
-              <ReadingProgressBar status={status} />
+            <div>
+              <div className="overflow-hidden rounded-full" style={{ height: 3, background: 'var(--border-subtle)' }}>
+                <motion.div
+                  className="h-full rounded-full"
+                  style={{ background: 'linear-gradient(to right, var(--gold-light), var(--gold))' }}
+                  initial={{ width: '18%' }}
+                  animate={{ width: status === 'IN_PROGRESS' ? '72%' : '100%' }}
+                  transition={{ duration: 1.4, ease: ease.outSoft }}
+                />
+              </div>
+              <p className="mt-1.5 font-sans text-xs" style={{ color: 'var(--text-muted)' }}>
+                {status === 'IN_PROGRESS' ? 'Расклад в процессе…' : 'Ожидание читателя'}
+              </p>
             </div>
           )}
         </motion.div>
 
-        {/* Insight suggestion while waiting */}
+        {/* Статьи пока ждёте */}
         {status !== 'COMPLETED' && (
           <motion.div variants={revealSubtle} initial="hidden" animate="visible"
             transition={{ delay: 0.4 }} className="mb-4">
@@ -191,10 +251,10 @@ export default function AsyncStatusPage() {
                 style={{ background: 'var(--bg-float)', border: '1px solid var(--border-subtle)' }}>
                 <div>
                   <p className="font-sans text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>
-                    Read while you wait
+                    Читайте пока ждёте
                   </p>
                   <p className="font-sans text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
-                    Insights on practice and preparation
+                    Статьи о практике и подготовке
                   </p>
                 </div>
                 <span style={{ color: 'var(--text-muted)' }}>→</span>
@@ -203,7 +263,7 @@ export default function AsyncStatusPage() {
           </motion.div>
         )}
 
-        {/* Demo shortcut */}
+        {/* Демо-кнопка */}
         {status === 'IN_PROGRESS' && readingId && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 5 }}>
             <button
@@ -213,13 +273,12 @@ export default function AsyncStatusPage() {
               }}
               className="w-full rounded-xl py-3 font-sans text-xs transition-all"
               style={{ border: '1px dashed var(--border-default)', color: 'var(--text-muted)' }}>
-              [Demo] Complete reading now
+              [Демо] Завершить расклад сейчас
             </button>
           </motion.div>
         )}
       </div>
 
-      {/* CTA */}
       <div className="relative px-6 pb-10 pt-4 safe-bottom">
         <AnimatePresence>
           {status === 'COMPLETED' && (
@@ -228,7 +287,7 @@ export default function AsyncStatusPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: dur.slow, ease: ease.outSoft }}>
               <Button onClick={() => router.push('/result')} fullWidth size="lg" variant="secondary">
-                Open my reading →
+                Открыть мой расклад →
               </Button>
             </motion.div>
           )}
@@ -237,8 +296,6 @@ export default function AsyncStatusPage() {
     </motion.div>
   )
 }
-
-// ─── Sub-components ──────────────────────────────────────────────────────────
 
 function StatusOrb({ status }: { status: StatusType }) {
   const colors: Record<StatusType, string> = {
@@ -257,92 +314,6 @@ function StatusOrb({ status }: { status: StatusType }) {
         />
       )}
       <div className="relative h-3 w-3 rounded-full" style={{ background: colors[status] }} />
-    </div>
-  )
-}
-
-function StageProgress({ currentIndex, status, readerName }: {
-  currentIndex: number; status: StatusType; readerName: string | null
-}) {
-  const stages = [
-    { label: 'Question received', detail: 'Delivered to your reader' },
-    { label: 'Reading in progress', detail: `${readerName?.split(' ')[0] ?? 'Your reader'} is composing` },
-    { label: 'Reading complete', detail: 'Ready to view' },
-  ]
-
-  return (
-    <div className="space-y-px">
-      {stages.map((stage, i) => {
-        const done = i < currentIndex
-        const active = i === currentIndex
-        return (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, x: -12 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: i * 0.1, duration: dur.normal, ease: ease.outSoft }}
-            className="flex items-center gap-4 py-3.5"
-          >
-            {/* Node */}
-            <div className="relative flex flex-col items-center" style={{ width: 32 }}>
-              <motion.div
-                animate={{
-                  background: done ? 'var(--gold)' : active ? 'var(--text-primary)' : 'var(--bg-raised)',
-                  borderColor: done || active ? 'transparent' : 'var(--border-default)',
-                }}
-                transition={{ duration: 0.5 }}
-                className="flex h-8 w-8 items-center justify-center rounded-xl border font-sans text-xs font-medium"
-                style={{ color: done || active ? 'white' : 'var(--text-muted)' }}
-              >
-                {done ? (
-                  <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 500 }}>
-                    ✓
-                  </motion.span>
-                ) : i + 1}
-              </motion.div>
-              {i < stages.length - 1 && (
-                <div className="mt-1" style={{ width: 1, height: 16, background: done ? 'var(--gold-light)' : 'var(--border-subtle)' }} />
-              )}
-            </div>
-
-            {/* Text */}
-            <div className="flex-1">
-              <p className="font-sans text-sm"
-                style={{ color: active ? 'var(--text-primary)' : done ? 'var(--text-secondary)' : 'var(--text-muted)', fontWeight: active ? 500 : 400 }}>
-                {stage.label}
-              </p>
-              {(done || active) && (
-                <motion.p
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  className="font-sans text-xs mt-0.5"
-                  style={{ color: 'var(--text-muted)' }}>
-                  {stage.detail}
-                </motion.p>
-              )}
-            </div>
-          </motion.div>
-        )
-      })}
-    </div>
-  )
-}
-
-function ReadingProgressBar({ status }: { status: StatusType }) {
-  return (
-    <div>
-      <div className="overflow-hidden rounded-full" style={{ height: 3, background: 'var(--border-subtle)' }}>
-        <motion.div
-          className="h-full rounded-full"
-          style={{ background: 'linear-gradient(to right, var(--gold-light), var(--gold))' }}
-          initial={{ width: '18%' }}
-          animate={{ width: status === 'IN_PROGRESS' ? '72%' : '100%' }}
-          transition={{ duration: 1.4, ease: ease.outSoft }}
-        />
-      </div>
-      <p className="mt-1.5 font-sans text-xs" style={{ color: 'var(--text-muted)' }}>
-        {status === 'IN_PROGRESS' ? 'In progress' : 'Awaiting'}
-      </p>
     </div>
   )
 }

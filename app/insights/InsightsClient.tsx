@@ -18,10 +18,10 @@ interface Props {
 }
 
 const CATEGORY_LABELS: Record<string, string> = {
-  practice: 'Practice',
-  guide: 'Guide',
-  insight: 'Insight',
-  general: 'General',
+  practice: 'Практика',
+  guide:    'Руководство',
+  insight:  'Откровение',
+  general:  'Общее',
 }
 
 export function InsightsClient({ insights }: Props) {
@@ -34,34 +34,34 @@ export function InsightsClient({ insights }: Props) {
       animate="visible"
       className="min-h-screen bg-ivory-50"
     >
-      {/* Header */}
+      {/* Шапка */}
       <div className="px-6 pt-14 pb-6">
         <div className="flex items-center justify-between mb-8">
           <button
             onClick={() => router.push('/question')}
             className="font-sans text-xs uppercase tracking-widest text-stone-400 hover:text-stone-600 transition-colors"
           >
-            ← Home
+            ← Главная
           </button>
           <p className="font-serif text-sm font-light text-stone-600">Lumier</p>
         </div>
 
         <div className="space-y-2">
           <p className="font-sans text-xs uppercase tracking-widest text-stone-400">
-            Insights
+            Статьи
           </p>
           <h1 className="font-serif text-4xl font-light text-stone-800">
-            Deepen your
+            Углубите вашу
             <br />
-            practice
+            практику
           </h1>
           <p className="font-sans text-sm text-stone-500">
-            Perspectives on reading, ritual, and inner work.
+            Размышления о чтении, ритуале и внутренней работе.
           </p>
         </div>
       </div>
 
-      {/* Featured */}
+      {/* Главная статья */}
       {insights.length > 0 && (
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -73,7 +73,7 @@ export function InsightsClient({ insights }: Props) {
         </motion.div>
       )}
 
-      {/* Article list */}
+      {/* Список статей */}
       <motion.div
         variants={staggerContainer}
         initial="hidden"
@@ -103,9 +103,9 @@ function FeaturedCard({ insight, onClick }: { insight: Insight; onClick: () => v
     >
       <div className="flex items-center justify-between">
         <span className="font-sans text-xs uppercase tracking-widest text-gold-500">
-          {CATEGORY_LABELS[insight.category] || 'Insight'}
+          {CATEGORY_LABELS[insight.category] || 'Откровение'}
         </span>
-        <span className="font-sans text-xs text-stone-400">{insight.readTime} min read</span>
+        <span className="font-sans text-xs text-stone-400">{insight.readTime} мин чтения</span>
       </div>
       <div>
         <h2 className="font-serif text-2xl font-light leading-snug text-stone-800 mb-2">
@@ -114,7 +114,7 @@ function FeaturedCard({ insight, onClick }: { insight: Insight; onClick: () => v
         <p className="font-sans text-sm leading-relaxed text-stone-500">{insight.preview}</p>
       </div>
       <div className="flex items-center gap-1.5 text-gold-500">
-        <span className="font-sans text-xs font-medium">Read article</span>
+        <span className="font-sans text-xs font-medium">Читать статью</span>
         <span className="text-sm">→</span>
       </div>
     </motion.div>
@@ -143,7 +143,7 @@ function ArticleCard({ insight, onClick }: { insight: Insight; onClick: () => vo
         </p>
       </div>
       <div className="flex-shrink-0 flex flex-col items-end gap-1 pt-0.5">
-        <span className="font-sans text-xs text-stone-300">{insight.readTime}m</span>
+        <span className="font-sans text-xs text-stone-300">{insight.readTime}м</span>
         <span className="text-stone-300 text-sm">→</span>
       </div>
     </motion.div>

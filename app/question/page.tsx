@@ -12,19 +12,19 @@ import { pageIn, staggerNormal, revealHero, revealNormal, revealSubtle } from '@
 import Link from 'next/link'
 
 const CATEGORIES = [
-  { id: 'relationships', label: 'Relationships' },
-  { id: 'career',        label: 'Career' },
-  { id: 'spiritual',     label: 'Spiritual' },
-  { id: 'general',       label: 'General' },
-  { id: 'health',        label: 'Health' },
-  { id: 'finance',       label: 'Finance' },
+  { id: 'relationships', label: 'Отношения' },
+  { id: 'career',        label: 'Карьера' },
+  { id: 'spiritual',     label: 'Духовное' },
+  { id: 'general',       label: 'Общее' },
+  { id: 'health',        label: 'Здоровье' },
+  { id: 'finance',       label: 'Финансы' },
 ]
 
 const PROMPTS = [
-  'I am facing a decision about…',
-  'Something I cannot seem to resolve is…',
-  'I want to understand why…',
-  'I am uncertain whether…',
+  'Я стою перед выбором…',
+  'Я не могу разрешить…',
+  'Я хочу понять, почему…',
+  'Я не уверен, стоит ли…',
 ]
 
 export default function QuestionPage() {
@@ -49,8 +49,8 @@ export default function QuestionPage() {
   if (!ready) return null
 
   async function handleSubmit() {
-    if (text.trim().length < 10) { setError('Please describe your question in a bit more detail.'); return }
-    if (!category) { setError('Please select a category.'); return }
+    if (text.trim().length < 10) { setError('Пожалуйста, опишите ваш вопрос подробнее.'); return }
+    if (!category) { setError('Пожалуйста, выберите категорию.'); return }
     setError('')
     setLoading(true)
     try {
@@ -61,7 +61,7 @@ export default function QuestionPage() {
         router.push('/readers')
       }
     } catch {
-      setError('Something went wrong. Please try again.')
+      setError('Что-то пошло не так. Попробуйте ещё раз.')
     } finally {
       setLoading(false)
     }
@@ -74,7 +74,7 @@ export default function QuestionPage() {
       <div className="flex items-center justify-between px-5 pt-14">
         <p className="font-serif text-xl font-light" style={{ color: 'var(--text-primary)', letterSpacing: '0.04em' }}>Lumier</p>
         <Link href="/insights" className="label-overline transition-opacity hover:opacity-60" style={{ color: 'var(--text-muted)' }}>
-          Insights
+          Статьи
         </Link>
       </div>
 
@@ -83,15 +83,15 @@ export default function QuestionPage() {
 
         <motion.div variants={revealHero} className="space-y-2 mb-8">
           <h2 className="font-serif font-light" style={{ fontSize: '2rem', lineHeight: 1.15, color: 'var(--text-primary)' }}>
-            What would you like<br />to explore?
+            Что вы хотите<br />исследовать?
           </h2>
           <p className="font-sans text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-            The clarity of your question shapes the depth of your reading.
+            Чёткость вашего вопроса определяет глубину расклада.
           </p>
         </motion.div>
 
         <motion.div variants={revealNormal} className="mb-5">
-          <p className="label-overline mb-2.5" style={{ color: 'var(--text-muted)' }}>Suggestions</p>
+          <p className="label-overline mb-2.5" style={{ color: 'var(--text-muted)' }}>Подсказки</p>
           <div className="flex flex-wrap gap-2">
             {PROMPTS.map((p) => (
               <button key={p} onClick={() => setText(p)}
@@ -104,8 +104,8 @@ export default function QuestionPage() {
         </motion.div>
 
         <motion.div variants={revealNormal} className="mb-5">
-          <Textarea label="Your question"
-            placeholder="Write your question here."
+          <Textarea label="Ваш вопрос"
+            placeholder="Напишите ваш вопрос здесь. Будьте так конкретны или открыты, как вам кажется правильным."
             value={text}
             onChange={(e) => { if (e.target.value.length <= MAX) setText(e.target.value) }}
             rows={5}
@@ -118,7 +118,7 @@ export default function QuestionPage() {
         </motion.div>
 
         <motion.div variants={revealNormal} className="mb-6">
-          <p className="label-overline mb-3" style={{ color: 'var(--text-muted)' }}>Category</p>
+          <p className="label-overline mb-3" style={{ color: 'var(--text-muted)' }}>Категория</p>
           <div className="grid grid-cols-3 gap-2">
             {CATEGORIES.map((cat) => (
               <button key={cat.id} onClick={() => setCategory(cat.id)}
@@ -140,7 +140,7 @@ export default function QuestionPage() {
       <div className="px-5 pb-10 pt-4 safe-bottom">
         <Button onClick={handleSubmit} loading={loading} fullWidth size="lg"
           disabled={text.trim().length < 10 || !category}>
-          Find my reader
+          Найти моего читателя
         </Button>
       </div>
     </motion.div>

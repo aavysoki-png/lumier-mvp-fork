@@ -62,20 +62,20 @@ export default function CheckoutPage() {
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
             <path d="M8 2L4 6L8 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
-          Back
+          Назад
         </button>
         <h2 className="font-serif font-light" style={{ fontSize: '2rem', color: 'var(--text-primary)' }}>
-          Review &amp; Pay
+          Оформление заказа
         </h2>
       </div>
 
       <motion.div variants={staggerNormal} initial="hidden" animate="visible"
         className="flex-1 px-5 pt-6 space-y-4">
 
-        {/* Order summary */}
+        {/* Состав заказа */}
         <motion.div variants={revealNormal} className="rounded-xl p-5 space-y-4"
           style={{ background: 'var(--bg-float)', border: '1px solid var(--border-subtle)' }}>
-          <p className="label-overline" style={{ color: 'var(--text-muted)' }}>Order Summary</p>
+          <p className="label-overline" style={{ color: 'var(--text-muted)' }}>Состав заказа</p>
           <div className="flex items-start justify-between gap-4">
             <div>
               <p className="font-serif text-xl" style={{ color: 'var(--text-primary)' }}>{reader.name}</p>
@@ -86,7 +86,7 @@ export default function CheckoutPage() {
 
           {question.text && (
             <div className="rounded-xl p-3" style={{ background: 'var(--bg-raised)', border: '1px solid var(--border-subtle)' }}>
-              <p className="label-overline mb-1.5" style={{ color: 'var(--text-muted)' }}>Your question</p>
+              <p className="label-overline mb-1.5" style={{ color: 'var(--text-muted)' }}>Ваш вопрос</p>
               <p className="font-sans text-sm leading-relaxed line-clamp-3" style={{ color: 'var(--text-secondary)' }}>
                 {question.text}
               </p>
@@ -94,29 +94,29 @@ export default function CheckoutPage() {
           )}
 
           <div className="flex justify-between pt-2" style={{ borderTop: '1px solid var(--border-subtle)' }}>
-            <p className="font-sans text-sm" style={{ color: 'var(--text-secondary)' }}>Total due today</p>
+            <p className="font-sans text-sm" style={{ color: 'var(--text-secondary)' }}>Итого к оплате</p>
             <p className="font-sans text-sm font-medium" style={{ color: 'var(--text-primary)' }}>${reader.price}</p>
           </div>
         </motion.div>
 
-        {/* Simulated payment */}
+        {/* Платёжные данные */}
         <motion.div variants={revealNormal} className="rounded-xl p-5 space-y-4"
           style={{ background: 'var(--bg-float)', border: '1px solid var(--border-subtle)' }}>
-          <p className="label-overline" style={{ color: 'var(--text-muted)' }}>Payment Details</p>
+          <p className="label-overline" style={{ color: 'var(--text-muted)' }}>Платёжные данные</p>
           <div className="space-y-3">
-            <FieldRow label="Card number" value="4242 4242 4242 4242" />
+            <FieldRow label="Номер карты" value="4242 4242 4242 4242" />
             <div className="grid grid-cols-2 gap-3">
-              <FieldRow label="Expiry" value="12 / 28" />
+              <FieldRow label="Срок действия" value="12 / 28" />
               <FieldRow label="CVC" value="•••" />
             </div>
           </div>
           <p className="font-sans text-xs" style={{ color: 'var(--text-muted)' }}>
-            ✦ Demo mode — no real charge is made.
+            ✦ Демо-режим — реальное списание не производится.
           </p>
         </motion.div>
 
         <motion.div variants={revealSubtle} className="flex justify-center gap-8 py-1">
-          {['Secure', 'Encrypted', 'Refundable'].map((t) => (
+          {['Безопасно', 'Зашифровано', 'Возврат гарантирован'].map((t) => (
             <p key={t} className="font-sans text-xs" style={{ color: 'var(--text-muted)' }}>{t}</p>
           ))}
         </motion.div>
@@ -128,11 +128,11 @@ export default function CheckoutPage() {
             className="flex items-center justify-center gap-2 rounded-2xl px-6 py-4"
             style={{ background: '#f0fdf4', border: '1px solid #bbf7d0' }}>
             <span style={{ color: '#16a34a' }}>✓</span>
-            <p className="font-sans text-sm" style={{ color: '#15803d' }}>Payment confirmed</p>
+            <p className="font-sans text-sm" style={{ color: '#15803d' }}>Оплата подтверждена</p>
           </motion.div>
         ) : (
           <Button onClick={handlePay} loading={loading} fullWidth size="lg">
-            Pay ${reader.price}
+            Оплатить ${reader.price}
           </Button>
         )}
       </div>

@@ -19,56 +19,56 @@ async function main() {
   const readers = await Promise.all([
     prisma.tarotReader.create({
       data: {
-        name: 'Elara Voss',
-        specialization: 'Relationships & Emotional Clarity',
+        name: 'Элара Восс',
+        specialization: 'Отношения и эмоциональная ясность',
         tier: ReaderTier.MASTER,
         price: 120,
         rating: 4.97,
-        bio: 'With 14 years of practice, Elara brings profound depth to questions of love, partnership, and self-worth. Her readings are known for their precision and lasting resonance.',
+        bio: '14 лет практики. Элара привносит глубину в вопросы любви, партнёрства и самооценки. Её расклады известны точностью и долгим резонансом.',
         imageUrl: null,
       },
     }),
     prisma.tarotReader.create({
       data: {
-        name: 'Marcus Thiel',
-        specialization: 'Career & Life Direction',
+        name: 'Маркус Тиль',
+        specialization: 'Карьера и жизненное направление',
         tier: ReaderTier.SENIOR,
         price: 85,
         rating: 4.89,
-        bio: 'Marcus combines classical tarot methodology with an intuitive sense for timing and opportunity. Ideal for those at professional crossroads.',
+        bio: 'Маркус соединяет классическую методологию таро с интуитивным ощущением времени и возможностей. Идеален для тех, кто стоит на профессиональном перепутье.',
         imageUrl: null,
       },
     }),
     prisma.tarotReader.create({
       data: {
-        name: 'Solin Park',
-        specialization: 'Spiritual Growth & Inner Work',
+        name: 'Солин Пак',
+        specialization: 'Духовный рост и внутренняя работа',
         tier: ReaderTier.MASTER,
         price: 140,
         rating: 4.95,
-        bio: 'Solin holds space for deep introspection, helping clients navigate transformation, grief, and awakening with clarity and compassion.',
+        bio: 'Солин создаёт пространство для глубокого самоисследования, помогая клиентам проходить через трансформацию, утрату и пробуждение с ясностью и состраданием.',
         imageUrl: null,
       },
     }),
     prisma.tarotReader.create({
       data: {
-        name: 'Nadia Orel',
-        specialization: 'Daily Guidance & Practical Insight',
+        name: 'Надия Орель',
+        specialization: 'Ежедневное руководство и практическое видение',
         tier: ReaderTier.FOUNDATION,
         price: 55,
         rating: 4.82,
-        bio: 'Nadia offers grounded, actionable readings for everyday questions. Clear, warm, and consistently accurate.',
+        bio: 'Надия предлагает заземлённые, конкретные расклады для повседневных вопросов. Ясная, тёплая и неизменно точная.',
         imageUrl: null,
       },
     }),
     prisma.tarotReader.create({
       data: {
-        name: 'James Calloway',
-        specialization: 'Shadow Work & Subconscious Patterns',
+        name: 'Джеймс Каллоуэй',
+        specialization: 'Теневая работа и бессознательные паттерны',
         tier: ReaderTier.SENIOR,
         price: 95,
         rating: 4.91,
-        bio: 'A former Jungian therapist turned reader, James excels in uncovering hidden motivations and repeating patterns that block growth.',
+        bio: 'Бывший юнгианский терапевт, ставший читателем. Джеймс мастерски раскрывает скрытые мотивации и повторяющиеся паттерны, блокирующие рост.',
         imageUrl: null,
       },
     }),
@@ -78,173 +78,171 @@ async function main() {
   await Promise.all([
     prisma.insightArticle.create({
       data: {
-        title: 'The Art of Asking the Right Question',
-        preview: 'The quality of your reading begins long before the cards are drawn. It starts with how you frame what you want to understand.',
-        content: `The quality of your reading begins long before the cards are drawn. It starts with how you frame what you want to understand.
+        title: 'Искусство верного вопроса',
+        preview: 'Качество вашего расклада начинается задолго до того, как карты вытянуты. Оно начинается с того, как вы формулируете то, что хотите понять.',
+        content: `Качество вашего расклада начинается задолго до того, как карты вытянуты. Оно начинается с того, как вы формулируете то, что хотите понять.
 
-Most people approach tarot with outcome-focused questions: "Will I get the job?" or "Does he love me?" These questions place your agency outside yourself — they treat the future as fixed and the cards as a window into fate.
+Большинство людей обращаются к таро с вопросами, ориентированными на результат: «Получу ли я эту работу?» или «Любит ли он меня?» Такие вопросы выносят вашу волю за скобки — они относятся к будущему как к чему-то фиксированному, а к картам — как к окну в судьбу.
 
-The most transformative readings emerge from questions that return agency to you.
+Самые трансформирующие расклады рождаются из вопросов, возвращающих волю вам.
 
-**From outcome to insight**
+**От результата к пониманию**
 
-Instead of "Will I get the job?" consider: "What do I need to understand about this opportunity and my readiness for it?"
+Вместо «Получу ли я работу?» попробуйте: «Что мне важно понять об этой возможности и моей готовности к ней?»
 
-Instead of "Does he love me?" try: "What am I not seeing clearly about this relationship dynamic?"
+Вместо «Любит ли он меня?» — «Что я не вижу ясно в динамике этих отношений?»
 
-This reframe isn't semantic. It fundamentally changes what you're asking the cards to ilLumierte. Outcome questions request a verdict. Insight questions request a mirror.
+Это не просто игра слов. Такая переформулировка меняет саму природу вопроса к картам. Вопрос о результате требует вердикта. Вопрос о понимании просит зеркало.
 
-**The zone of productive uncertainty**
+**Зона продуктивной неопределённости**
 
-The best questions sit in what I call the zone of productive uncertainty — they're about something that genuinely matters to you, where you have real stakes, and where you have room to grow or shift your perspective.
+Лучшие вопросы находятся в том, что я называю зоной продуктивной неопределённости — они о чём-то, что действительно важно для вас, где у вас есть реальные ставки и пространство для роста или смены перспективы.
 
-If you already know the answer, the reading will feel flat. If the question doesn't matter, the cards will feel arbitrary. The sweet spot is the question that makes you slightly uncomfortable to ask out loud.
+Если вы уже знаете ответ, расклад будет плоским. Если вопрос не важен — карты покажутся случайными. Золотая середина — это вопрос, который вам немного неловко произносить вслух.
 
-**Before your next reading**
+**Перед следующим раскладом**
 
-Take three minutes before you begin. Write your question down. Read it back to yourself. Ask: Am I asking for a verdict, or am I asking for understanding? If it's a verdict — rewrite it. The cards will thank you.`,
+Возьмите три минуты. Запишите вопрос. Перечитайте его. Спросите себя: я прошу вердикт или понимание? Если вердикт — перепишите. Карты будут благодарны.`,
         category: 'practice',
         readTime: 4,
       },
     }),
     prisma.insightArticle.create({
       data: {
-        title: 'When a Reading Doesn\'t Resonate',
-        preview: 'Not every reading lands immediately. Here\'s how to sit with one that feels off — and what it might be trying to tell you.',
-        content: `Not every reading lands immediately. Sometimes the cards feel random, disconnected from your question, or simply wrong.
+        title: 'Когда расклад не резонирует',
+        preview: 'Не каждый расклад попадает сразу. Вот как работать с тем, что кажется мимо — и что это может говорить вам.',
+        content: `Не каждый расклад попадает сразу. Иногда карты кажутся случайными, оторванными от вашего вопроса или попросту неверными.
 
-This is more informative than a resonant reading, if you know how to work with it.
+Это информативнее, чем резонирующий расклад — если вы умеете с этим работать.
 
-**Resistance as signal**
+**Сопротивление как сигнал**
 
-When a reading doesn't resonate, your first instinct might be to dismiss it. Resist that impulse. Sit with the discomfort for a moment. Ask yourself: is this reading off, or is it off from what I wanted to hear?
+Когда расклад не резонирует, первый импульс — отмахнуться от него. Не торопитесь. Задержитесь на дискомфорте. Спросите себя: этот расклад неверен — или он говорит не то, что я хотел услышать?
 
-There is a difference. The first is worth investigating. The second is worth sitting with.
+Это разные вещи. Первое стоит исследовать. Со вторым стоит посидеть.
 
-**The literal vs. the symbolic**
+**Буквальное и символическое**
 
-Tarot communicates primarily through metaphor. A card showing conflict doesn't necessarily mean external conflict — it might point to internal tension you've been suppressing. A card suggesting loss might be pointing toward what you need to release, not what's being taken.
+Таро говорит прежде всего метафорами. Карта с изображением конфликта необязательно указывает на внешний конфликт — она может указывать на внутреннее напряжение, которое вы подавляете. Карта с образом потери может говорить о том, что вам нужно отпустить, а не о том, что отнимают.
 
-If a reading feels wrong, try reading every card one level more abstractly than your first interpretation.
+Если расклад кажется неверным, попробуйте читать каждую карту на уровень абстрактнее первой интерпретации.
 
-**The question behind the question**
+**Вопрос за вопросом**
 
-Sometimes a reading doesn't resonate because the cards are answering a different question than the one you asked — specifically, the question underneath your question.
+Иногда расклад не резонирует потому, что карты отвечают на другой вопрос — тот, что стоит за вашим вопросом.
 
-You asked about the job. The cards answered about your fear of visibility. You asked about the relationship. The cards answered about your relationship with yourself.
+Вы спрашивали о работе. Карты ответили о вашем страхе быть увиденным. Вы спрашивали об отношениях. Карты ответили об отношениях с самим собой.
 
-When a reading feels misaligned, ask: what question might these cards actually be answering?
+Когда расклад кажется несовпадающим, спросите: на какой вопрос могли бы отвечать эти карты?
 
-**Returning to it**
+**Возвращайтесь к нему**
 
-A reading that felt irrelevant three months ago may become startlingly clear when you return to it. Keep a record of your readings. The ones that confused you most often become the most instructive over time.`,
+Расклад, казавшийся неуместным три месяца назад, может стать разительно ясным, когда вы к нему вернётесь. Ведите записи. Те, что вас запутали, со временем часто становятся самыми поучительными.`,
         category: 'practice',
         readTime: 5,
       },
     }),
     prisma.insightArticle.create({
       data: {
-        title: 'Understanding Reader Tiers',
-        preview: 'What separates a Foundation reader from a Master? It\'s not just years — it\'s the kind of depth each brings to different questions.',
-        content: `Choosing a reader isn't only about budget. Each tier offers something qualitatively different, and the right choice depends on what you're navigating.
+        title: 'Понимание уровней читателей',
+        preview: 'Что отличает читателя Foundation от Мастера? Не только годы — но и глубина, которую каждый привносит в разные вопросы.',
+        content: `Выбор читателя — это не только бюджет. Каждый уровень предлагает качественно иное, и правильный выбор зависит от того, через что вы проходите.
 
-**Foundation Readers**
+**Читатели Foundation**
 
-Foundation readers are skilled practitioners who bring warmth, consistency, and clarity to practical questions. They're ideal for: daily or weekly guidance, decision points with clear parameters, and people who are new to tarot consultation and want an accessible entry point.
+Читатели Foundation — опытные практики, привносящие тепло, последовательность и ясность в практические вопросы. Идеальны для: ежедневного или еженедельного руководства, решений с чёткими параметрами, для тех, кто только знакомится с таро и хочет доступную точку входа.
 
-What they offer: grounded, actionable readings. What to bring them: concrete questions about your day-to-day life.
+Что они предлагают: заземлённые, конкретные расклады. Что им приносить: конкретные вопросы о повседневной жизни.
 
-**Senior Readers**
+**Читатели Senior**
 
-Senior readers have typically worked with hundreds of clients across complex life situations. They've developed the pattern recognition to notice what a client isn't saying, and the skill to navigate emotionally charged questions without losing precision.
+Читатели Senior, как правило, работали с сотнями клиентов в сложных жизненных ситуациях. Они развили распознавание паттернов, чтобы замечать то, что клиент не говорит, и мастерство навигации в эмоционально заряженных вопросах без потери точности.
 
-Ideal for: relationship dynamics, career pivots, questions with layered emotional stakes. What they offer: depth and nuance. What to bring them: the thing you've been circling around but haven't quite said.
+Идеальны для: динамики отношений, профессиональных поворотов, вопросов с многослойными эмоциональными ставками. Что они предлагают: глубину и нюансы. Что им приносить: то, вокруг чего вы ходите, но ещё не произнесли.
 
-**Master Readers**
+**Мастера**
 
-Master readers work primarily with questions of transformation — the ones that don't have clean answers because they're really asking about who you're becoming, not what you should do.
+Мастера работают преимущественно с вопросами трансформации — теми, у которых нет чётких ответов, потому что они на самом деле о том, кем вы становитесь, а не о том, что вам делать.
 
-They're slower. More expensive. Not always more comfortable. But for the right question at the right moment, a Master reading can be genuinely clarifying in ways that linger for years.
+Они медленнее. Дороже. Не всегда комфортнее. Но для верного вопроса в верный момент расклад Мастера может быть поистине прояснительным — на годы.
 
-Ideal for: major life transitions, long-standing patterns that haven't shifted, grief, and questions that require more than advice.
+Идеальны для: крупных жизненных переходов, давних паттернов, горя и вопросов, требующих большего, чем совет.
 
-**The honest recommendation**
+**Честная рекомендация**
 
-Start where your question actually lives. A Foundation reader with a clear question will outperform a Master reader with a vague one every time.`,
+Начинайте там, где живёт ваш вопрос. Читатель Foundation с чётким вопросом превзойдёт Мастера с расплывчатым — всегда.`,
         category: 'guide',
         readTime: 5,
       },
     }),
     prisma.insightArticle.create({
       data: {
-        title: 'On the Ethics of Timing Questions',
-        preview: 'Questions about "when" are among the most requested — and the most misunderstood. Here\'s what tarot can and can\'t offer around timing.',
-        content: `"When will this happen?" is one of the most common questions readers receive, and one of the most genuinely difficult to answer well.
+        title: 'Об этике вопросов о времени',
+        preview: 'Вопросы о «когда» — одни из самых частых и самых непонятых. Вот что таро может и не может предложить в вопросах времени.',
+        content: `«Когда это произойдёт?» — один из самых частых вопросов читателям и один из самых сложных для честного ответа.
 
-Not because timing is impossible to read, but because the nature of time in tarot works differently than most clients expect.
+Не потому что время невозможно прочитать, а потому что природа времени в таро работает иначе, чем ожидают большинство клиентов.
 
-**How tarot relates to time**
+**Как таро относится ко времени**
 
-Tarot doesn't read a fixed timeline — it reads current trajectories. The cards reveal what's likely to unfold given present conditions, energies, and patterns. This means timing in tarot is always conditional: it points toward when something is likely to happen if things continue as they are.
+Таро не читает фиксированную временную шкалу — оно читает текущие траектории. Карты раскрывают то, что, вероятно, развернётся при нынешних условиях, энергиях и паттернах. Это означает, что время в таро всегда условно: оно указывает на то, когда что-то, скорее всего, произойдёт, если всё продолжится как есть.
 
-This is both more honest and more useful than a fixed date, though it requires more from the client.
+Это честнее и полезнее фиксированной даты, хотя требует больше от клиента.
 
-**What affects timing**
+**Что влияет на время**
 
-Three things most significantly affect whether and when an outcome manifests:
+Три вещи наиболее значительно влияют на то, произойдёт ли исход и когда:
 
-1. **Your readiness** — Some things can't happen until you've completed an internal process. The cards often point here first.
+1. **Ваша готовность** — Некоторые вещи не могут случиться, пока вы не завершили внутренний процесс. Карты часто указывают именно сюда.
 
-2. **External momentum** — Some situations have their own timing, and your role is patience or preparation rather than action.
+2. **Внешний импульс** — Некоторые ситуации имеют собственное время, и ваша роль — терпение или подготовка, а не действие.
 
-3. **Unresolved interference** — Something in the present is blocking forward movement. The cards may show the block before they show the timeline.
+3. **Нерешённые препятствия** — Что-то в настоящем блокирует движение вперёд. Карты могут показать блок раньше, чем покажут временной горизонт.
 
-**Asking better timing questions**
+**Задавайте лучшие вопросы о времени**
 
-Instead of "when will I meet my partner?" try: "What conditions need to be in place for me to be ready for a committed relationship — and how close am I to those conditions?"
+Вместо «когда я встречу партнёра?» попробуйте: «Какие условия должны сложиться, чтобы я был готов к серьёзным отношениям — и насколько я близко к этим условиям?»
 
-This gives you something to work with. The timing becomes something you can influence, rather than something that happens to you.
+Это даёт вам что-то, с чем можно работать. Время становится чем-то, на что вы можете влиять, а не чем-то, что происходит с вами.
 
-**What Master readers do differently**
+**Что делают Мастера иначе**
 
-Experienced readers don't avoid timing — they contextualize it. They'll tell you what needs to shift before timing becomes the relevant question. That conversation is often more valuable than a date.`,
+Опытные читатели не избегают времени — они контекстуализируют его. Они скажут вам, что должно измениться, прежде чем время станет уместным вопросом. Этот разговор часто ценнее даты.`,
         category: 'insight',
         readTime: 6,
       },
     }),
     prisma.insightArticle.create({
       data: {
-        title: 'Preparing for a Live Session',
-        preview: 'A live reading rewards preparation. These simple practices will help you arrive with the clarity to make the most of your time.',
-        content: `A live reading is a conversation, not a performance. Your preparation directly affects its quality.
+        title: 'Подготовка к живой сессии',
+        preview: 'Живой расклад вознаграждает подготовку. Вот простые практики, которые помогут прийти с ясностью и получить максимум от вашего времени.',
+        content: `Живой расклад — это разговор, а не выступление. Ваша подготовка напрямую влияет на его качество.
 
-**The night before**
+**Накануне вечером**
 
-Take ten minutes with your question. Write it down. Not the polished version — the raw version. Then look at it and ask: what am I really asking? Sometimes the real question is one layer deeper than what you first wrote.
+Уделите десять минут своему вопросу. Запишите его. Не отполированную версию — сырую. Затем посмотрите на него и спросите: что я на самом деле спрашиваю? Иногда настоящий вопрос на уровень глубже первого написанного.
 
-If you can, return to it in the morning. Sleep often clarifies what's essential.
+Если можете, вернитесь к нему утром. Сон часто проясняет то, что существенно.
 
-**Arriving in the right state**
+**Прийти в нужном состоянии**
 
-You don't need to be calm to have a good reading. You do need to be present. If you're arriving frantic — from a full workday, a difficult conversation, a distracted commute — take five minutes before the session to consciously set those aside.
+Вам не нужно быть спокойным, чтобы получить хороший расклад. Вам нужно быть присутствующим. Если вы приходите взвинченным — после напряжённого рабочего дня, сложного разговора, рассеянной дороги — возьмите пять минут перед сессией, чтобы сознательно отложить это в сторону.
 
-A simple practice: three slow breaths. A single statement to yourself about what you're here to explore. That's enough.
+Простая практика: три медленных вдоха. Одно утверждение себе о том, что вы здесь исследуете. Этого достаточно.
 
-**What to bring and not bring**
+**Что брать и не брать**
 
-Bring: a specific question or area, openness to what the cards actually say (not what you hope they say), and permission to be surprised.
+Берите: конкретный вопрос или область, открытость к тому, что карты действительно говорят (не к тому, что вы надеетесь услышать), разрешение быть удивлённым.
 
-Don't bring: a need for the reading to confirm what you've already decided. This doesn't mean you can't disagree — you can and sometimes should. It means arriving without already having closed the question.
+Не берите: потребность в том, чтобы расклад подтвердил уже принятое решение. Это не значит, что вы не можете не соглашаться — можете и иногда должны. Это значит — прийти без уже закрытого вопроса.
 
-**During the session**
+**Во время сессии**
 
-Say what you notice. If something a reader says doesn't land, say so — that's useful information. If something lands hard, say so. A live reading is more accurate when it's genuinely responsive.
+Говорите, что замечаете. Если слова читателя не попадают — скажите об этом. Это полезная информация. Если что-то бьёт точно — тоже скажите. Живой расклад точнее, когда он действительно отзывчив.
 
-Your reader is reading energy and cards, not a script. The more present you are, the more accurate the reading tends to be.
+**После сессии**
 
-**After the session**
-
-Take notes. Not immediately — let yourself sit with what came up for a few hours first. Then write down what you're carrying. The things that made you uncomfortable are often worth particular attention.`,
+Делайте заметки. Не сразу — дайте себе несколько часов, чтобы осесть. Потом запишите, что несёте с собой. Вещи, которые вас дискомфортировали, часто заслуживают особого внимания.`,
         category: 'guide',
         readTime: 5,
       },
@@ -254,16 +252,16 @@ Take notes. Not immediately — let yourself sit with what came up for a few hou
   // Demo user
   const demoUser = await prisma.user.create({
     data: {
-      name: 'Demo User',
+      name: 'Демо Пользователь',
       dateOfBirth: new Date('1990-06-15'),
     },
   })
 
   // Demo question
-  const demoQuestion = await prisma.question.create({
+  await prisma.question.create({
     data: {
       userId: demoUser.id,
-      text: 'I am at a crossroads in my career. I have an opportunity to leave my stable role for something uncertain but exciting. What do I need to understand about this choice?',
+      text: 'Я стою на перепутье в карьере. У меня есть возможность покинуть стабильное место ради чего-то неопределённого, но захватывающего. Что мне важно понять об этом выборе?',
       category: 'career',
     },
   })
@@ -272,7 +270,7 @@ Take notes. Not immediately — let yourself sit with what came up for a few hou
   const demoSession = await prisma.session.create({
     data: {
       userId: demoUser.id,
-      readerId: readers[1].id, // Marcus
+      readerId: readers[1].id,
       type: SessionType.ASYNC,
       status: SessionStatus.COMPLETED,
     },
@@ -292,47 +290,45 @@ Take notes. Not immediately — let yourself sit with what came up for a few hou
       sessionId: demoSession.id,
       status: AsyncReadingStatus.COMPLETED,
       completedAt: new Date(),
-      resultText: `**Your Reading: The Crossroads**
+      resultText: `**Ваш расклад: На перепутье**
 
-*Three cards were drawn for your question about career transition.*
-
----
-
-**Position 1 — Where You Stand: The Eight of Pentacles**
-
-You have built real competency in your current role. This card confirms what you likely already sense: you are not leaving because you have failed here, or because you are running from difficulty. You have genuinely mastered something. The Eight of Pentacles asks you to honor that, rather than minimizing it in your anxiety about what comes next.
-
-This matters because transitions undertaken from a place of recognized strength land differently than those made from restlessness or fear.
+*Для вашего вопроса были вытянуты три карты.*
 
 ---
 
-**Position 2 — What You Are Moving Toward: The Fool**
+**Позиция 1 — Где вы стоите: Восьмёрка Пентаклей**
 
-The Fool is the card of genuine new beginnings — not naive leaps, but the kind of step that cannot be fully understood from where you currently stand. Its appearance here is significant. It suggests that the "uncertainty" you named in your question is not a problem to be solved before you proceed; it is the nature of the threshold itself.
+Вы создали подлинное мастерство на своём нынешнем месте. Эта карта подтверждает то, что вы, вероятно, уже чувствуете: вы уходите не потому, что потерпели здесь поражение. Вы действительно овладели чем-то важным. Восьмёрка Пентаклей просит вас признать этот фундамент, прежде чем шагнуть вперёд.
 
-The Fool does not carry a map. He carries enough.
-
-What you are being invited into is not a clear path — it is a genuine opening. The fear that accompanies this is appropriate. It is the appropriate response to real possibility.
+Это важно, потому что переходы, предпринятые из позиции признанной силы, разворачиваются иначе, чем те, что совершаются из беспокойства или страха.
 
 ---
 
-**Position 3 — What This Transition Requires of You: The High Priestess**
+**Позиция 2 — Куда вы движетесь: Шут**
 
-This is the card I want you to sit with longest. The High Priestess asks you to listen more deeply to what you already know, before you reach for external validation.
+Шут — карта подлинных новых начинаний, а не наивных прыжков, а того шага, который невозможно полностью понять с того места, где вы стоите сейчас. Его появление здесь значимо. Оно говорит о том, что «неопределённость», которую вы назвали в своём вопросе, — это не проблема, которую нужно решить перед тем, как действовать. Это сама природа порога.
 
-You have been asking others whether you should do this. You have been running the numbers, seeking reassurance. None of that is wrong — but it has also been a way of postponing a quieter conversation with yourself.
-
-She asks: what do you know, in the part of you that doesn't need to be convinced?
+Шут не несёт карты. Он несёт достаточно.
 
 ---
 
-**In Summary**
+**Позиция 3 — Что требует этот переход: Верховная Жрица**
 
-You have the foundation. The opportunity is real. What stands between you and stepping into it is not information — it is the permission you have not yet fully given yourself.
+Это карта, над которой я прошу вас задержаться дольше всего. Верховная Жрица просит вас прислушаться глубже к тому, что вы уже знаете, прежде чем тянуться за внешним подтверждением.
 
-The cards do not tell you to go or to stay. They tell you that you are more prepared than you feel, that what awaits is genuinely unknown and genuinely worth knowing, and that the clarity you are seeking will not come from more analysis.
+Вы спрашивали других, стоит ли вам это делать. Вы считали цифры, искали уверенности. Всё это не неверно — но это также был способ откладывать более тихий разговор с собой.
 
-It will come from listening to what you already know.`,
+Она спрашивает: что вы знаете в той части себя, которой не нужно быть убеждённой?
+
+---
+
+**В итоге**
+
+Фундамент у вас есть. Возможность реальна. Единственное, что стоит между вами и следующим шагом — это не информация. Это разрешение, которое вы ещё не дали себе полностью.
+
+Карты не говорят вам идти или оставаться. Они говорят, что вы более подготовлены, чем чувствуете, что то, что ждёт впереди — подлинно неизвестно и подлинно достойно познания, и что ясность, которую вы ищете, придёт не от большего анализа.
+
+Она придёт от прислушивания к тому, что вы уже знаете.`,
     },
   })
 
@@ -340,7 +336,7 @@ It will come from listening to what you already know.`,
   const liveSession = await prisma.session.create({
     data: {
       userId: demoUser.id,
-      readerId: readers[0].id, // Elara
+      readerId: readers[0].id,
       type: SessionType.LIVE,
       status: SessionStatus.COMPLETED,
     },
@@ -351,29 +347,29 @@ It will come from listening to what you already know.`,
       {
         sessionId: liveSession.id,
         senderType: SenderType.READER,
-        content: "Welcome. I've taken a moment to center myself with your question. When you're ready, tell me a little more about what's at the heart of what you're asking.",
+        content: 'Добро пожаловать. Я взяла момент, чтобы сосредоточиться с вашим вопросом. Когда будете готовы, расскажите мне немного больше о том, что лежит в сердце того, о чём вы спрашиваете.',
         createdAt: new Date(Date.now() - 30 * 60 * 1000),
       },
       {
         sessionId: liveSession.id,
         senderType: SenderType.USER,
-        content: "I've been in this relationship for three years and I feel like I've lost myself a bit. I'm not sure if I'm staying out of love or out of habit.",
+        content: 'Я в этих отношениях три года и чувствую, что немного потеряла себя. Я не уверена, остаюсь ли я из любви или из привычки.',
         createdAt: new Date(Date.now() - 28 * 60 * 1000),
       },
       {
         sessionId: liveSession.id,
         senderType: SenderType.READER,
-        content: "Thank you for naming that distinction — love versus habit. That's an honest and courageous question to sit with. I'm drawing three cards now.",
+        content: 'Благодарю вас за то, что назвали это различие — любовь или привычка. Это честный и смелый вопрос, с которым стоит посидеть. Я вытягиваю три карты.',
         createdAt: new Date(Date.now() - 26 * 60 * 1000),
       },
     ],
   })
 
   console.log('✅ Seed complete.')
-  console.log(`   ${readers.length} readers created`)
-  console.log(`   5 insight articles created`)
-  console.log(`   1 demo user created`)
-  console.log(`   2 demo sessions created`)
+  console.log(`   ${readers.length} читателей создано`)
+  console.log(`   5 статей создано`)
+  console.log(`   1 демо-пользователь создан`)
+  console.log(`   2 демо-сессии созданы`)
 }
 
 main()

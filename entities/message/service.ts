@@ -2,21 +2,20 @@ import { prisma } from '@/shared/lib/prisma'
 import { NotFoundError } from '@/server/errors'
 import type { SendMessageInput } from './types'
 
-// Rotating reader responses for demo mode
+// Ответы читателя для демо-режима (на русском)
 const READER_RESPONSES = [
-  "I'm drawing a card in response to what you've shared. Give me a moment.",
-  "The cards are showing me something interesting here. What you're describing resonates with the Five of Cups — a card about sitting with what has been lost before you can see what remains.",
-  "This is significant. I want to ask you something: when you imagine the version of yourself who has made this decision, what does their life feel like?",
-  "The Tower has appeared. Before you respond — this is not a card of catastrophe, though it can feel that way. It is a card of revelation. Something concealing itself is about to become clear.",
-  "Take your time with this. What you're processing is real and it deserves space.",
-  "The Hermit suggests you already know more than you think. What would you do if there were no one left to convince?",
-  "I see the Two of Swords here — a deliberate blindness. Not from weakness, but from the fear that seeing clearly will force a choice you're not ready to make. Are you ready now?",
+  'Я вытягиваю карту в ответ на то, что вы рассказали. Дайте мне момент.',
+  'Карты показывают мне кое-что интересное. То, что вы описываете, резонирует с Пятёркой Кубков — картой о том, как сидеть с тем, что утрачено, прежде чем увидеть то, что осталось.',
+  'Это значимо. Я хочу задать вам вопрос: когда вы представляете версию себя, принявшую это решение, как ощущается её жизнь?',
+  'Появилась Башня. Прежде чем вы ответите — это не карта катастрофы, хотя так может ощущаться. Это карта откровения. Нечто, что скрывало себя, вот-вот станет ясным.',
+  'Не торопитесь с этим. То, что вы переживаете, реально и заслуживает пространства.',
+  'Отшельник говорит о том, что вы уже знаете больше, чем кажется. Что бы вы сделали, если бы больше некого было убеждать?',
+  'Я вижу здесь Двойку Мечей — намеренная слепота. Не от слабости, а от страха, что ясное видение вынудит к выбору, к которому вы ещё не готовы. Вы готовы теперь?',
 ]
 
 export async function sendMessage(input: SendMessageInput) {
   const message = await prisma.message.create({ data: input })
 
-  // Auto-generate reader response when user sends
   if (input.senderType === 'USER') {
     await _scheduleReaderResponse(input.sessionId)
   }
@@ -35,18 +34,16 @@ export async function sendReaderGreeting(sessionId: string, readerName: string) 
   const existing = await prisma.message.findFirst({
     where: { sessionId, senderType: 'READER' },
   })
-  if (existing) return existing // idempotent
+  if (existing) return existing
 
   return prisma.message.create({
     data: {
       sessionId,
       senderType: 'READER',
-      content: `Welcome. I'm ${readerName}. I've taken a moment to hold your question. When you're ready, share whatever feels right.`,
+      content: `Добро пожаловать. Я ${readerName}. Я взял момент, чтобы сосредоточиться с вашим вопросом. Когда будете готовы, поделитесь тем, что кажется вам важным.`,
     },
   })
 }
-
-// ─── Internal ────────────────────────────────────────────────────────────────
 
 async function _scheduleReaderResponse(sessionId: string) {
   const response =
@@ -57,7 +54,6 @@ async function _scheduleReaderResponse(sessionId: string) {
       sessionId,
       senderType: 'READER',
       content: response,
-      // Small offset so it sorts after the user message
       createdAt: new Date(Date.now() + 1200),
     },
   })

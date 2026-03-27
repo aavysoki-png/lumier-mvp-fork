@@ -12,15 +12,15 @@ export default function NotFound() {
         className="space-y-4"
       >
         <p className="font-serif text-6xl font-light text-stone-200">404</p>
-        <h1 className="font-serif text-2xl font-light text-stone-700">Page not found</h1>
+        <h1 className="font-serif text-2xl font-light text-stone-700">Страница не найдена</h1>
         <p className="font-sans text-sm text-stone-400">
-          This page doesn't exist or has been moved.
+          Эта страница не существует или была перемещена.
         </p>
         <Link
           href="/"
           className="inline-block mt-4 rounded-xl bg-stone-800 px-6 py-3 font-sans text-sm text-white hover:bg-stone-900 transition-colors"
         >
-          Return home
+          Вернуться на главную
         </Link>
       </motion.div>
     </div>

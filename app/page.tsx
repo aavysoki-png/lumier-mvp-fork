@@ -25,7 +25,6 @@ export default function SplashPage() {
       className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden"
       style={{ background: 'var(--bg-base)' }}
     >
-      {/* Ambient radial glow */}
       <motion.div
         initial={{ opacity: 0, scale: 0.6 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -37,14 +36,12 @@ export default function SplashPage() {
         }}
       />
 
-      {/* Wordmark group */}
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: dur.verySlow, ease: ease.outSoft, delay: 0.3 }}
         className="relative text-center"
       >
-        {/* Overline */}
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -52,22 +49,16 @@ export default function SplashPage() {
           className="label-overline mb-5"
           style={{ color: 'var(--gold)' }}
         >
-          Personal Insight
+          Личное откровение
         </motion.p>
 
-        {/* Name */}
         <h1
           className="font-serif font-light leading-none"
-          style={{
-            fontSize: '4rem',
-            color: 'var(--text-primary)',
-            letterSpacing: '0.08em',
-          }}
+          style={{ fontSize: '4rem', color: 'var(--text-primary)', letterSpacing: '0.08em' }}
         >
           Lumier
         </h1>
 
-        {/* Animated rule */}
         <motion.div
           initial={{ scaleX: 0, opacity: 0 }}
           animate={{ scaleX: 1, opacity: 1 }}
@@ -80,7 +71,6 @@ export default function SplashPage() {
           }}
         />
 
-        {/* Tagline */}
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 0.55 }}
@@ -88,11 +78,10 @@ export default function SplashPage() {
           className="mt-4 font-sans text-xs"
           style={{ letterSpacing: '0.15em', color: 'var(--text-secondary)' }}
         >
-          A space for genuine reflection
+          Пространство для подлинного размышления
         </motion.p>
       </motion.div>
 
-      {/* Breath indicator */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -109,12 +98,7 @@ export default function SplashPage() {
                 width: i === 1 ? [4, 12, 4] : [3, 6, 3],
                 opacity: [0.3, 0.8, 0.3],
               }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                delay: i * 0.3,
-                ease: 'easeInOut',
-              }}
+              transition={{ duration: 2, repeat: Infinity, delay: i * 0.3, ease: 'easeInOut' }}
             />
           ))}
         </div>

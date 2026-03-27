@@ -20,8 +20,15 @@ interface Reader {
 }
 
 const TIER_ORDER = { MASTER: 0, SENIOR: 1, FOUNDATION: 2 }
-const FILTERS = ['All', 'Foundation', 'Senior', 'Master'] as const
+const FILTERS = ['Все', 'Foundation', 'Senior', 'Master'] as const
 type Filter = typeof FILTERS[number]
+
+const TIER_FILTER_MAP: Record<Filter, string> = {
+  'Все': 'All',
+  'Foundation': 'FOUNDATION',
+  'Senior': 'SENIOR',
+  'Master': 'MASTER',
+}
 
 function findRecommended(readers: Reader[]): string | null {
   return readers.find((r) => r.tier === 'MASTER')?.id ?? readers[0]?.id ?? null
@@ -31,11 +38,12 @@ export function ReadersClient({ readers }: { readers: Reader[] }) {
   const router = useRouter()
   const { question, reader: selectedReader, setReader } = useAppStore()
   const { markComplete } = useFlowStore()
-  const [filter, setFilter] = useState<Filter>('All')
+  const [filter, setFilter] = useState<Filter>('Все')
   const recommended = findRecommended(readers)
 
+  const filterValue = TIER_FILTER_MAP[filter]
   const filtered = readers
-    .filter((r) => filter === 'All' || r.tier === filter.toUpperCase())
+    .filter((r) => filterValue === 'All' || r.tier === filterValue)
     .sort((a, b) => TIER_ORDER[a.tier] - TIER_ORDER[b.tier])
 
   function handleSelect(r: Reader) {
@@ -50,7 +58,7 @@ export function ReadersClient({ readers }: { readers: Reader[] }) {
 
   return (
     <div className="flex min-h-screen flex-col" style={{ background: 'var(--bg-base)' }}>
-      {/* Header */}
+      {/* Шапка */}
       <div className="px-6 pt-12 pb-5">
         <motion.button
           onClick={() => router.back()}
@@ -63,7 +71,7 @@ export function ReadersClient({ readers }: { readers: Reader[] }) {
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
             <path d="M8 2L4 6L8 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
-          Back
+          Назад
         </motion.button>
 
         <motion.div
@@ -72,11 +80,11 @@ export function ReadersClient({ readers }: { readers: Reader[] }) {
           transition={{ duration: dur.slow, ease: ease.outSoft }}
         >
           <h1 className="font-serif font-light" style={{ fontSize: '2rem', lineHeight: 1.15, color: 'var(--text-primary)' }}>
-            Choose your guide
+            Выберите своего проводника
           </h1>
           {question.category && (
             <p className="mt-1.5 font-sans text-sm" style={{ color: 'var(--text-muted)' }}>
-              For questions about{' '}
+              По вопросам о{' '}
               <span style={{ color: 'var(--text-secondary)' }} className="capitalize">
                 {question.category}
               </span>
@@ -84,7 +92,7 @@ export function ReadersClient({ readers }: { readers: Reader[] }) {
           )}
         </motion.div>
 
-        {/* Filter pills */}
+        {/* Фильтры */}
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
@@ -109,7 +117,7 @@ export function ReadersClient({ readers }: { readers: Reader[] }) {
         </motion.div>
       </div>
 
-      {/* Reader list */}
+      {/* Список читателей */}
       <motion.div
         variants={staggerNormal}
         initial="hidden"
@@ -121,14 +129,14 @@ export function ReadersClient({ readers }: { readers: Reader[] }) {
             <ReaderCard
               reader={r}
               isSelected={selectedReader.id === r.id}
-              isRecommended={r.id === recommended && filter === 'All'}
+              isRecommended={r.id === recommended && filter === 'Все'}
               onSelect={() => handleSelect(r)}
             />
           </motion.div>
         ))}
       </motion.div>
 
-      {/* Sticky CTA */}
+      {/* Кнопка выбора */}
       <AnimatePresence>
         {selectedReader.id && (
           <motion.div
@@ -138,13 +146,10 @@ export function ReadersClient({ readers }: { readers: Reader[] }) {
             exit="exit"
             className="fixed bottom-0 left-0 right-0 z-20"
           >
-            <div
-              className="glass border-t safe-bottom px-6 py-4"
-              style={{ borderColor: 'var(--border-subtle)' }}
-            >
+            <div className="glass border-t safe-bottom px-6 py-4" style={{ borderColor: 'var(--border-subtle)' }}>
               <div className="mb-3 flex items-center justify-between">
                 <div>
-                  <p className="label-overline" style={{ color: 'var(--text-muted)' }}>Selected guide</p>
+                  <p className="label-overline" style={{ color: 'var(--text-muted)' }}>Выбранный проводник</p>
                   <p className="font-serif text-base mt-0.5" style={{ color: 'var(--text-primary)' }}>
                     {selectedReader.name}
                   </p>
@@ -154,7 +159,7 @@ export function ReadersClient({ readers }: { readers: Reader[] }) {
                 </p>
               </div>
               <Button onClick={handleContinue} fullWidth size="lg">
-                Continue to booking
+                Перейти к оформлению
               </Button>
             </div>
           </motion.div>
@@ -199,7 +204,7 @@ function ReaderCard({
       className="relative cursor-pointer overflow-hidden rounded-xl"
       style={cardStyle}
     >
-      {/* Recommended ribbon */}
+      {/* Рекомендованный */}
       {isRecommended && !isSelected && (
         <div className="absolute right-0 top-0">
           <div
@@ -211,16 +216,14 @@ function ReaderCard({
             }}
           >
             <p className="label-overline" style={{ color: 'var(--gold)', fontSize: '0.6rem' }}>
-              Recommended
+              Рекомендован
             </p>
           </div>
         </div>
       )}
 
       <div className="p-5">
-        {/* Top row */}
         <div className="flex gap-4">
-          {/* Avatar */}
           <div
             className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-xl font-serif text-xl font-light"
             style={{ background: isSelected ? 'rgba(196,150,74,0.12)' : meta.bg, color: isSelected ? 'var(--gold)' : meta.color }}
@@ -228,13 +231,9 @@ function ReaderCard({
             {reader.name.charAt(0)}
           </div>
 
-          {/* Name + specialization + tier */}
           <div className="flex-1 min-w-0 pt-0.5">
             <div className="flex items-center gap-2 flex-wrap">
-              <h3
-                className="font-serif font-medium"
-                style={{ fontSize: '1.125rem', color: 'var(--text-primary)', lineHeight: 1.2 }}
-              >
+              <h3 className="font-serif font-medium" style={{ fontSize: '1.125rem', color: 'var(--text-primary)', lineHeight: 1.2 }}>
                 {reader.name}
               </h3>
               <span
@@ -249,7 +248,6 @@ function ReaderCard({
             </p>
           </div>
 
-          {/* Price + rating */}
           <div className="flex-shrink-0 text-right pt-0.5">
             <p className="font-serif text-xl font-light" style={{ color: 'var(--text-primary)' }}>
               ${reader.price}
@@ -263,7 +261,6 @@ function ReaderCard({
           </div>
         </div>
 
-        {/* Bio */}
         <div className="mt-4 pl-[4.5rem]">
           <p
             className={cn('font-sans text-sm leading-relaxed', !expanded && 'line-clamp-2')}
@@ -276,11 +273,10 @@ function ReaderCard({
             className="mt-1.5 font-sans text-xs transition-opacity hover:opacity-70"
             style={{ color: 'var(--text-muted)' }}
           >
-            {expanded ? 'Less ↑' : 'Read more ↓'}
+            {expanded ? 'Свернуть ↑' : 'Подробнее ↓'}
           </button>
         </div>
 
-        {/* Selected confirmation */}
         <AnimatePresence>
           {isSelected && (
             <motion.div
@@ -303,7 +299,7 @@ function ReaderCard({
                   ✓
                 </motion.span>
                 <p className="font-sans text-xs" style={{ color: 'var(--gold)' }}>
-                  {reader.name.split(' ')[0]} selected — continue below
+                  {reader.name.split(' ')[0]} выбран — продолжите ниже
                 </p>
               </div>
             </motion.div>

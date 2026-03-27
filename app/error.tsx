@@ -22,15 +22,15 @@ export default function Error({
         className="space-y-4"
       >
         <p className="font-serif text-4xl font-light text-stone-300">✦</p>
-        <h1 className="font-serif text-2xl font-light text-stone-700">Something went wrong</h1>
+        <h1 className="font-serif text-2xl font-light text-stone-700">Что-то пошло не так</h1>
         <p className="font-sans text-sm text-stone-400 max-w-xs mx-auto">
-          An unexpected error occurred. Please try again.
+          Произошла непредвиденная ошибка. Пожалуйста, попробуйте ещё раз.
         </p>
         <button
           onClick={reset}
           className="inline-block mt-4 rounded-xl bg-stone-800 px-6 py-3 font-sans text-sm text-white hover:bg-stone-900 transition-colors"
         >
-          Try again
+          Попробовать снова
         </button>
       </motion.div>
     </div>

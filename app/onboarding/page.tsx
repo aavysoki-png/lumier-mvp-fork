@@ -21,19 +21,19 @@ export default function OnboardingPage() {
 
   function validateStep1() {
     const errs: typeof errors = {}
-    if (!name.trim() || name.trim().length < 2) errs.name = 'Please enter your name'
+    if (!name.trim() || name.trim().length < 2) errs.name = 'Пожалуйста, введите ваше имя'
     setErrors(errs)
     return !errs.name
   }
 
   function validateStep2() {
     const errs: typeof errors = {}
-    if (!dob) { errs.dob = 'Please enter your date of birth'; setErrors(errs); return false }
+    if (!dob) { errs.dob = 'Пожалуйста, укажите дату рождения'; setErrors(errs); return false }
     const parsed = new Date(dob)
     const age = new Date().getFullYear() - parsed.getFullYear()
-    if (isNaN(parsed.getTime())) errs.dob = 'Invalid date'
-    else if (age < 18) errs.dob = 'You must be at least 18'
-    else if (age > 120) errs.dob = 'Please enter a valid date'
+    if (isNaN(parsed.getTime())) errs.dob = 'Некорректная дата'
+    else if (age < 18) errs.dob = 'Вам должно быть не менее 18 лет'
+    else if (age > 120) errs.dob = 'Пожалуйста, введите корректную дату'
     setErrors(errs)
     return !errs.dob
   }
@@ -53,7 +53,7 @@ export default function OnboardingPage() {
     finally { setLoading(false) }
   }
 
-  const firstName = name.split(' ')[0] || 'you'
+  const firstName = name.split(' ')[0] || 'вас'
 
   return (
     <motion.div
@@ -64,13 +64,12 @@ export default function OnboardingPage() {
       className="flex min-h-screen flex-col"
       style={{ background: 'var(--bg-base)' }}
     >
-      {/* Ambient top accent */}
       <div
         className="pointer-events-none absolute inset-x-0 top-0 h-64"
         style={{ background: 'linear-gradient(to bottom, rgba(196,150,74,0.04), transparent)' }}
       />
 
-      {/* Header */}
+      {/* Шапка */}
       <div className="relative px-6 pt-14">
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }}>
           <p className="font-serif text-lg font-light" style={{ color: 'var(--text-primary)', letterSpacing: '0.04em' }}>
@@ -80,7 +79,7 @@ export default function OnboardingPage() {
         </motion.div>
       </div>
 
-      {/* Step progress bar */}
+      {/* Индикатор шага */}
       <div className="relative px-6 pt-8">
         <div className="flex gap-1.5">
           {[1, 2].map((s) => (
@@ -97,7 +96,7 @@ export default function OnboardingPage() {
         </div>
       </div>
 
-      {/* Content */}
+      {/* Контент */}
       <div className="relative flex flex-1 flex-col px-6 pt-12">
         <AnimatePresence mode="wait">
           {step === 1 ? (
@@ -109,27 +108,27 @@ export default function OnboardingPage() {
               exit={{ opacity: 0, x: -20, transition: { duration: dur.fast } }}
             >
               <motion.p variants={revealSubtle} className="label-overline mb-3" style={{ color: 'var(--gold)' }}>
-                Step 1 of 2
+                Шаг 1 из 2
               </motion.p>
               <motion.h2
                 variants={revealHero}
                 className="font-serif mb-3 font-light"
                 style={{ fontSize: '2.25rem', lineHeight: 1.1, color: 'var(--text-primary)' }}
               >
-                Before we begin,<br />who are you?
+                Прежде чем начать,<br />кто вы?
               </motion.h2>
               <motion.p
                 variants={revealNormal}
                 className="font-sans text-sm leading-relaxed mb-10"
                 style={{ color: 'var(--text-secondary)' }}
               >
-                Your reader uses your name to ground the reading in who you actually are — not just what you&apos;re asking.
+                Ваше имя помогает читателю выстроить связь с вами — не только с вашим вопросом.
               </motion.p>
               <motion.div variants={revealNormal}>
                 <Input
-                  label="Your name"
+                  label="Ваше имя"
                   type="text"
-                  placeholder="Full name"
+                  placeholder="Имя и фамилия"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   error={errors.name}
@@ -147,25 +146,25 @@ export default function OnboardingPage() {
               exit={{ opacity: 0, x: -20, transition: { duration: dur.fast } }}
             >
               <motion.p variants={revealSubtle} className="label-overline mb-3" style={{ color: 'var(--gold)' }}>
-                Step 2 of 2
+                Шаг 2 из 2
               </motion.p>
               <motion.h2
                 variants={revealHero}
                 className="font-serif mb-3 font-light"
                 style={{ fontSize: '2.25rem', lineHeight: 1.1, color: 'var(--text-primary)' }}
               >
-                Hello, {firstName}.<br />One more thing.
+                Здравствуйте, {firstName}.<br />Ещё один момент.
               </motion.h2>
               <motion.p
                 variants={revealNormal}
                 className="font-sans text-sm leading-relaxed mb-10"
                 style={{ color: 'var(--text-secondary)' }}
               >
-                Your date of birth provides astrological context your reader draws on. It&apos;s used only for your reading.
+                Дата рождения задаёт астрологический контекст, на который опирается ваш читатель.
               </motion.p>
               <motion.div variants={revealNormal}>
                 <Input
-                  label="Date of birth"
+                  label="Дата рождения"
                   type="date"
                   value={dob}
                   onChange={(e) => setDob(e.target.value)}
@@ -179,7 +178,7 @@ export default function OnboardingPage() {
                 style={{ background: 'var(--bg-raised)', border: '1px solid var(--border-subtle)' }}
               >
                 <p className="font-sans text-xs leading-relaxed" style={{ color: 'var(--text-muted)' }}>
-                  Your information is used only for your reading. It is never shared, sold, or retained beyond your session.
+                  Ваши данные используются исключительно для расклада. Мы никогда не передаём и не храним их после сессии.
                 </p>
               </motion.div>
             </motion.div>
@@ -187,10 +186,10 @@ export default function OnboardingPage() {
         </AnimatePresence>
       </div>
 
-      {/* CTA */}
+      {/* Кнопки */}
       <div className="relative px-6 pb-10 pt-6 safe-bottom space-y-3">
         <Button onClick={handleContinue} loading={loading} fullWidth size="lg">
-          {step === 1 ? 'Continue' : 'Begin my reading'}
+          {step === 1 ? 'Продолжить' : 'Начать моё чтение'}
         </Button>
         {step === 2 && (
           <button
@@ -198,7 +197,7 @@ export default function OnboardingPage() {
             className="w-full font-sans text-sm transition-colors"
             style={{ color: 'var(--text-muted)' }}
           >
-            ← Back
+            ← Назад
           </button>
         )}
       </div>

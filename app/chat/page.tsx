@@ -1,4 +1,5 @@
 'use client'
+
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -88,12 +89,12 @@ export default function ChatPage() {
     }
   }
 
-  const initial = reader.name?.charAt(0) ?? 'R'
-  const firstName = reader.name?.split(' ')[0] ?? 'Reader'
+  const initial = reader.name?.charAt(0) ?? 'Ч'
+  const firstName = reader.name?.split(' ')[0] ?? 'Читатель'
 
   return (
     <div className="flex h-[100dvh] flex-col" style={{ background: 'var(--bg-base)' }}>
-      {/* Header */}
+      {/* Шапка */}
       <div className="flex-shrink-0 glass" style={{ borderBottom: '1px solid var(--border-subtle)' }}>
         <div className="flex items-center gap-3 px-5 py-3.5">
           <div className="relative flex-shrink-0">
@@ -112,10 +113,10 @@ export default function ChatPage() {
           </div>
           <div className="flex-1 min-w-0">
             <p className="font-serif text-base font-medium truncate" style={{ color: 'var(--text-primary)', lineHeight: 1.2 }}>
-              {reader.name ?? 'Your Reader'}
+              {reader.name ?? 'Ваш читатель'}
             </p>
             <p className="font-sans text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
-              {reader.specialization ?? 'Consultation active'}
+              {reader.specialization ?? 'Сессия активна'}
             </p>
           </div>
           <button
@@ -123,12 +124,12 @@ export default function ChatPage() {
             className="font-sans text-xs px-3 py-1.5 rounded-full transition-all"
             style={{ color: 'var(--text-muted)', border: '1px solid var(--border-subtle)', background: 'var(--bg-raised)' }}
           >
-            End session
+            Завершить
           </button>
         </div>
       </div>
 
-      {/* Messages */}
+      {/* Сообщения */}
       <div className="flex-1 overflow-y-auto px-5 py-6 space-y-5">
         {!initialized && (
           <div className="flex justify-center py-12">
@@ -187,7 +188,7 @@ export default function ChatPage() {
         <div ref={bottomRef} className="h-2" />
       </div>
 
-      {/* Input */}
+      {/* Поле ввода */}
       <div className="flex-shrink-0 glass safe-bottom" style={{ borderTop: '1px solid var(--border-subtle)' }}>
         <div className="flex items-end gap-3 px-5 py-3.5">
           <textarea
@@ -195,7 +196,7 @@ export default function ChatPage() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend() } }}
-            placeholder={`Write to ${firstName}…`}
+            placeholder={`Напишите ${firstName}…`}
             rows={1}
             style={{
               minHeight: '44px',

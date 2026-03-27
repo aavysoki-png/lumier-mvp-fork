@@ -1,4 +1,5 @@
 'use client'
+
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
@@ -19,9 +20,9 @@ export default function AsyncSubmittedPage() {
   }, [])
 
   const steps = [
-    { label: 'Request received', done: step >= 0 },
-    { label: 'Reading in progress', done: step >= 1 },
-    { label: 'Response delivered', done: step >= 3 },
+    { label: 'Запрос получен', done: step >= 0 },
+    { label: 'Расклад в процессе', done: step >= 1 },
+    { label: 'Ответ доставлен', done: step >= 3 },
   ]
 
   return (
@@ -33,7 +34,7 @@ export default function AsyncSubmittedPage() {
       style={{ background: 'var(--bg-base)' }}
     >
       <div className="flex flex-1 flex-col items-center justify-center px-5 text-center">
-        {/* Icon */}
+        {/* Иконка */}
         <motion.div
           initial={{ scale: 0.7, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -53,14 +54,14 @@ export default function AsyncSubmittedPage() {
 
         <motion.div variants={staggerNormal} initial="hidden" animate="visible" className="space-y-3 mb-10">
           <motion.h2 variants={revealHero} className="font-serif font-light" style={{ fontSize: '1.875rem', color: 'var(--text-primary)' }}>
-            Your reading is underway
+            Ваш расклад начался
           </motion.h2>
           <motion.p variants={revealNormal} className="font-sans text-sm leading-relaxed max-w-xs mx-auto" style={{ color: 'var(--text-secondary)' }}>
-            {reader.name?.split(' ')[0]} has received your question and will begin their reading shortly. You&apos;ll receive the full response within 24 hours.
+            {reader.name?.split(' ')[0]} получил ваш вопрос и скоро приступит к работе. Полный ответ будет готов в течение 24 часов.
           </motion.p>
         </motion.div>
 
-        {/* Progress steps */}
+        {/* Прогресс */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
@@ -95,14 +96,14 @@ export default function AsyncSubmittedPage() {
           className="w-full max-w-xs space-y-3"
         >
           <Button onClick={() => router.push('/async/status')} fullWidth size="lg">
-            Track my reading
+            Отслеживать расклад
           </Button>
           <Link
             href="/insights"
             className="block text-center font-sans text-sm transition-opacity hover:opacity-70"
             style={{ color: 'var(--text-muted)' }}
           >
-            Browse insights while you wait
+            Читать статьи пока ждёте
           </Link>
         </motion.div>
       </div>
