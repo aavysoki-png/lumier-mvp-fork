@@ -48,6 +48,7 @@ export async function getReaderSession(sessionId: string) {
     where: { id: sessionId, readerId: reader.id },
     include: {
       user: { select: { id: true, name: true, email: true, dateOfBirth: true } },
+      reader: { select: { id: true, name: true, specialization: true } },
       order: true,
       asyncReading: true,
       messages: { orderBy: { createdAt: 'asc' } },
