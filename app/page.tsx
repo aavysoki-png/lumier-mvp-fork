@@ -106,6 +106,31 @@ export default function SplashPage() {
           </div>
         </motion.button>
 
+        {/* AI Таро */}
+        <motion.button
+          whileHover={{ y: -2, boxShadow: '0 8px 32px rgba(212,149,74,0.20)' }}
+          whileTap={{ scale: 0.97 }}
+          onClick={() => router.push('/tarot')}
+          className="w-full rounded-2xl px-6 py-5 text-left transition-all"
+          style={{
+            background: 'var(--bg-float)',
+            border: '1px solid rgba(212,149,74,0.15)',
+            boxShadow: '0 0 20px rgba(212,149,74,0.06)',
+          }}
+        >
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="font-serif text-lg font-medium" style={{ color: 'var(--gold)', lineHeight: 1.2 }}>
+                Расклад Таро
+              </p>
+              <p className="font-sans text-xs mt-1" style={{ color: 'var(--text-muted)' }}>
+                AI-интерпретация от Lumier
+              </p>
+            </div>
+            <span style={{ color: 'var(--gold)', fontSize: '1.25rem', opacity: 0.7 }}>◈</span>
+          </div>
+        </motion.button>
+
         {/* Новости и прогнозы */}
         <motion.button
           whileHover={{ y: -2, boxShadow: '0 8px 32px rgba(196,150,74,0.10)' }}
