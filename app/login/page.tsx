@@ -58,6 +58,14 @@ export default function LoginPage() {
             <Input name="email" label="Email" type="email" placeholder="you@example.com" required />
             <Input name="password" label="Пароль" type="password" placeholder="••••••" required />
 
+            <div className="text-right">
+              <Link href="/forgot-password"
+                className="font-sans text-xs transition-opacity hover:opacity-70"
+                style={{ color: 'var(--gold)' }}>
+                Забыли пароль?
+              </Link>
+            </div>
+
             {error && (
               <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                 className="font-sans text-xs text-red-500 text-center">
