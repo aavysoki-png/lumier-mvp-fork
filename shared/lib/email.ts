@@ -1,30 +1,15 @@
-import nodemailer from 'nodemailer'
-
-function createTransporter() {
-  return nodemailer.createTransport({
-    host: process.env.SMTP_HOST || 'mail.privateemail.com',
-    port: Number(process.env.SMTP_PORT) || 465,
-    secure: true,
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
-    },
-    // Serverless-friendly settings
-    connectionTimeout: 10000,
-    greetingTimeout: 10000,
-    socketTimeout: 15000,
-    dnsTimeout: 10000,
-  })
-}
+import { Resend } from 'resend'
 
 export async function sendPasswordResetEmail(to: string, token: string) {
+  const apiKey = process.env.RESEND_API_KEY
+  if (!apiKey) throw new Error('RESEND_API_KEY not configured')
+
+  const resend = new Resend(apiKey)
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://lumierinsight.com'
   const resetUrl = `${baseUrl}/reset-password?token=${token}`
 
-  const transporter = createTransporter()
-
-  await transporter.sendMail({
-    from: `"Lumier" <${process.env.SMTP_USER || 'info@lumierinsight.com'}>`,
+  await resend.emails.send({
+    from: 'Lumier <info@lumierinsight.com>',
     to,
     subject: 'Восстановление пароля — Lumier',
     html: `
