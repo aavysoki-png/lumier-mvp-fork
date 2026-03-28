@@ -13,6 +13,22 @@ import { dur, ease } from '@/shared/animations/variants'
 
 type Phase = 'question' | 'drawing' | 'reading'
 
+/** Strip JSON/markdown artifacts from AI text */
+function clean(text: string): string {
+  if (!text) return ''
+  return text
+    .replace(/^```json\s*/i, '').replace(/```$/g, '')   // remove markdown fences
+    .replace(/\\n\\n/g, '\n\n')                          // literal \n\n → real newlines
+    .replace(/\\n/g, '\n')                               // literal \n → real newline
+    .replace(/\\/g, '')                                   // stray backslashes
+    .trim()
+}
+
+/** Split text into paragraphs, filtering blanks */
+function paragraphs(text: string): string[] {
+  return clean(text).split(/\n\n+/).filter(p => p.trim().length > 0)
+}
+
 const CATEGORIES = [
   { id: 'relationships', label: 'Отношения' },
   { id: 'career',        label: 'Карьера' },
@@ -510,7 +526,7 @@ function ReadingPhase({
           className="font-serif font-light italic leading-relaxed mx-auto max-w-md"
           style={{ fontSize: '1.35rem', color: 'var(--text-primary)' }}
         >
-          &ldquo;{reading.summary}&rdquo;
+          &ldquo;{clean(reading.summary)}&rdquo;
         </blockquote>
         <p className="font-sans text-xs" style={{ color: 'var(--text-muted)' }}>
           {question}
@@ -561,7 +577,7 @@ function ReadingPhase({
         className="space-y-6"
       >
         <div className="reading-prose">
-          {reading.interpretation.split('\n\n').map((para, i) => (
+          {paragraphs(reading.interpretation).map((para, i) => (
             <motion.p
               key={i}
               initial={{ opacity: 0, y: 10 }}
@@ -604,7 +620,7 @@ function ReadingPhase({
                 </span>
               </div>
               <p className="font-sans text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-                {ci.insight}
+                {clean(ci.insight)}
               </p>
             </motion.div>
           ))}
@@ -629,7 +645,7 @@ function ReadingPhase({
             className="font-serif font-light leading-relaxed mx-auto max-w-md"
             style={{ fontSize: '1.1rem', color: 'var(--text-primary)' }}
           >
-            {reading.advice}
+            {clean(reading.advice)}
           </p>
         </motion.div>
       )}
