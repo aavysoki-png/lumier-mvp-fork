@@ -3,9 +3,12 @@
 export interface DeckCard {
   id: number
   name: string
+  nameRu: string
   arcana: 'major' | 'minor'
   suit?: 'wands' | 'cups' | 'swords' | 'pentacles'
 }
+
+export type Gender = 'male' | 'female' | 'unspecified'
 
 export interface DrawnCard extends DeckCard {
   isReversed: boolean
