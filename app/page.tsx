@@ -70,48 +70,61 @@ export default function OnboardingPage() {
 
 function HeroScreen({ onTry, router }: { onTry: () => void; router: ReturnType<typeof useRouter> }) {
   const features = [
-    { icon: '◈', text: 'ИИ нового поколения анализирует вашу ситуацию' },
-    { icon: '⚜', text: 'Живые эксперты-консультанты, а не боты' },
-    { icon: '✦', text: 'Реальные инсайты, а не случайные фразы' },
+    { icon: '◈', title: 'ИИ нового поколения',      text: 'Передовые модели анализируют контекст вашей ситуации и дают персональные инсайты' },
+    { icon: '⚜', title: 'Живые эксперты',            text: 'Реальные консультанты с многолетним опытом, а не скрипты и чат-боты' },
+    { icon: '✦', title: 'Настоящие результаты',      text: 'Структурированные разборы, которые помогают увидеть ситуацию с новой стороны' },
   ]
 
   return (
-    <motion.div {...screenIn} className="flex min-h-screen flex-col px-6 pt-16 pb-10">
+    <motion.div {...screenIn} className="min-h-screen flex flex-col">
 
-      {/* Top — Logo */}
-      <motion.div
+      {/* ── Navigation bar ────────────────────────────────── */}
+      <motion.nav
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.8, delay: 0.2 }}
-        className="text-center mb-4"
+        transition={{ duration: 0.6, delay: 0.2 }}
+        className="px-6 md:px-12 py-5 flex items-center justify-between"
       >
         <p className="font-serif text-lg font-light" style={{ color: 'var(--text-primary)', letterSpacing: '0.08em' }}>
           Lumier
         </p>
-        <div className="mx-auto mt-2 origin-center"
-          style={{ height: '1px', width: '32px', background: 'linear-gradient(to right, transparent, var(--gold), transparent)' }} />
-      </motion.div>
+        <div className="flex items-center gap-3">
+          <button onClick={() => router.push('/login')}
+            className="font-sans text-xs transition-opacity hover:opacity-70 hidden sm:block"
+            style={{ color: 'var(--text-secondary)' }}>
+            Войти
+          </button>
+          <motion.button whileTap={{ scale: 0.97 }}
+            onClick={() => router.push('/register')}
+            className="rounded-full px-4 py-1.5 font-sans text-xs font-medium transition-all hidden sm:block"
+            style={{ border: '1px solid rgba(212,149,74,0.25)', color: 'var(--gold)' }}>
+            Регистрация
+          </motion.button>
+        </div>
+      </motion.nav>
 
-      {/* Center — Value proposition */}
-      <div className="flex-1 flex flex-col justify-center">
+      {/* ── Main content — stacks on mobile, side-by-side on desktop ── */}
+      <div className="flex-1 flex flex-col md:flex-row items-center justify-center gap-10 md:gap-20 px-6 md:px-16 lg:px-24 py-8 md:py-0">
+
+        {/* Left column — Value proposition */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: dur.verySlow, ease: ease.outSoft, delay: 0.4 }}
-          className="text-center mb-10"
+          className="text-center md:text-left max-w-lg"
         >
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6 }}
-            className="font-sans text-xs uppercase tracking-[0.18em] mb-5"
+            className="font-sans text-xs uppercase tracking-[0.18em] mb-4 md:mb-5"
             style={{ color: 'var(--gold)' }}
           >
             Платформа глубинных инсайтов
           </motion.p>
 
-          <h1 className="font-serif font-light leading-[1.08] mx-auto max-w-[340px]"
-            style={{ fontSize: '2.4rem', color: 'var(--text-primary)' }}>
+          <h1 className="font-serif font-light leading-[1.08]"
+            style={{ fontSize: 'clamp(2rem, 5vw, 3.2rem)', color: 'var(--text-primary)' }}>
             Ответы, которые
             <br />невозможно найти
             <br /><span style={{ color: 'var(--gold)' }}>в поиске</span>
@@ -121,70 +134,76 @@ function HeroScreen({ onTry, router }: { onTry: () => void; router: ReturnType<t
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.7 }}
             transition={{ delay: 1.0 }}
-            className="mt-5 font-sans text-sm mx-auto max-w-xs leading-[1.7]"
+            className="mt-5 font-sans text-sm md:text-base leading-[1.7] max-w-md"
             style={{ color: 'var(--text-secondary)' }}
           >
             Lumier объединяет мощь передового ИИ, мудрость символов
             и&nbsp;опыт живых экспертов — чтобы дать вам ясность
             в&nbsp;моменты, когда она важнее всего
           </motion.p>
+
+          {/* CTA buttons — below text on all screens */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.8, duration: 0.6 }}
+            className="flex flex-col sm:flex-row gap-3 mt-8 max-w-sm md:max-w-none"
+          >
+            <motion.button whileHover={{ y: -2, boxShadow: '0 0 36px rgba(212,149,74,0.28)' }}
+              whileTap={{ scale: 0.97 }} onClick={onTry}
+              className="rounded-2xl px-8 py-4 font-sans text-sm font-medium transition-all sm:w-auto w-full"
+              style={{ background: 'var(--gold)', color: '#0E1520', boxShadow: '0 0 24px rgba(212,149,74,0.20)' }}>
+              Узнать больше
+            </motion.button>
+            <motion.button whileHover={{ y: -1 }} whileTap={{ scale: 0.97 }}
+              onClick={() => router.push('/register')}
+              className="rounded-2xl px-8 py-3.5 font-sans text-sm font-medium transition-all sm:w-auto w-full"
+              style={{ background: 'var(--bg-float)', border: '1px solid rgba(212,149,74,0.20)', color: 'var(--gold)' }}>
+              Зарегистрироваться
+            </motion.button>
+          </motion.div>
+
+          {/* Mobile-only login link */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 2.1 }}
+            className="mt-4 font-sans text-xs sm:hidden"
+            style={{ color: 'var(--text-muted)' }}
+          >
+            Уже есть аккаунт?{' '}
+            <button onClick={() => router.push('/login')}
+              className="transition-opacity hover:opacity-60" style={{ color: 'var(--gold)' }}>Войти</button>
+          </motion.p>
         </motion.div>
 
-        {/* Trust signals */}
+        {/* Right column — Feature cards */}
         <motion.div
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.3, duration: 0.7 }}
-          className="space-y-3 mx-auto max-w-xs w-full mb-10"
+          className="space-y-3 w-full max-w-xs md:max-w-sm"
         >
           {features.map((f, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, x: -10 }}
+              initial={{ opacity: 0, x: 12 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 1.4 + i * 0.15 }}
-              className="flex items-center gap-3 rounded-xl px-4 py-3"
+              className="rounded-xl px-5 py-4 md:py-5"
               style={{ background: 'var(--bg-float)', border: '1px solid var(--border-subtle)' }}
             >
-              <span style={{ color: 'var(--gold)', fontSize: '0.9rem', flexShrink: 0, width: '20px', textAlign: 'center' }}>{f.icon}</span>
-              <p className="font-sans text-xs leading-[1.5]" style={{ color: 'var(--text-secondary)' }}>{f.text}</p>
+              <div className="flex items-start gap-3.5">
+                <span className="mt-0.5 flex-shrink-0" style={{ color: 'var(--gold)', fontSize: '1rem' }}>{f.icon}</span>
+                <div>
+                  <p className="font-sans text-sm font-medium mb-1" style={{ color: 'var(--text-primary)' }}>{f.title}</p>
+                  <p className="font-sans text-xs leading-[1.6]" style={{ color: 'var(--text-secondary)' }}>{f.text}</p>
+                </div>
+              </div>
             </motion.div>
           ))}
         </motion.div>
       </div>
-
-      {/* Bottom — Actions */}
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.9, duration: 0.7 }}
-        className="w-full max-w-xs mx-auto space-y-3"
-      >
-        {/* Primary — Explore */}
-        <motion.button whileHover={{ y: -2, boxShadow: '0 0 36px rgba(212,149,74,0.28)' }}
-          whileTap={{ scale: 0.97 }} onClick={onTry}
-          className="w-full rounded-2xl px-6 py-4 font-sans text-sm font-medium transition-all"
-          style={{ background: 'var(--gold)', color: '#0E1520', boxShadow: '0 0 24px rgba(212,149,74,0.20)' }}>
-          Узнать больше
-        </motion.button>
-
-        {/* Register */}
-        <motion.button whileHover={{ y: -1 }} whileTap={{ scale: 0.97 }}
-          onClick={() => router.push('/register')}
-          className="w-full rounded-2xl px-6 py-3.5 font-sans text-sm font-medium transition-all"
-          style={{ background: 'var(--bg-float)', border: '1px solid rgba(212,149,74,0.20)', color: 'var(--gold)' }}>
-          Зарегистрироваться
-        </motion.button>
-
-        {/* Login */}
-        <button
-          onClick={() => router.push('/login')}
-          className="w-full font-sans text-xs transition-opacity hover:opacity-60 py-2"
-          style={{ color: 'var(--text-muted)' }}
-        >
-          Уже есть аккаунт? <span style={{ color: 'var(--gold)' }}>Войти</span>
-        </button>
-      </motion.div>
     </motion.div>
   )
 }
