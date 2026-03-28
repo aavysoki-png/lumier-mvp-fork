@@ -77,18 +77,49 @@ export function CabinetClient({ user, sessions }: { user: User; sessions: Sessio
           </motion.h1>
         </motion.div>
 
-        {/* Кнопка нового расклада */}
-        <motion.div variants={revealNormal} initial="hidden" animate="visible">
-          <Link href="/question">
-            <div className="flex items-center justify-between rounded-xl px-5 py-4 transition-all cursor-pointer"
-              style={{ background: 'var(--gold)', boxShadow: '0 0 24px rgba(212,149,74,0.20), 0 4px 16px rgba(0,0,0,0.35)' }}>
-              <div>
-                <p className="font-serif text-lg font-medium" style={{ color: '#0E1520' }}>Новый расклад</p>
-                <p className="font-sans text-xs mt-0.5" style={{ color: 'rgba(14,21,32,0.6)' }}>Задать вопрос читателю</p>
+        {/* Действия */}
+        <motion.div variants={staggerNormal} initial="hidden" animate="visible" className="space-y-3">
+          {/* Консультация с экспертом */}
+          <motion.div variants={revealNormal}>
+            <Link href="/question">
+              <div className="flex items-center justify-between rounded-xl px-5 py-4 transition-all cursor-pointer"
+                style={{ background: 'var(--gold)', boxShadow: '0 0 24px rgba(212,149,74,0.20), 0 4px 16px rgba(0,0,0,0.35)' }}>
+                <div>
+                  <p className="font-serif text-lg font-medium" style={{ color: '#0E1520' }}>Консультация с экспертом</p>
+                  <p className="font-sans text-xs mt-0.5" style={{ color: 'rgba(14,21,32,0.6)' }}>Живой разбор от специалиста</p>
+                </div>
+                <span style={{ color: '#0E1520', fontSize: '1.25rem' }}>⚜</span>
               </div>
-              <span style={{ color: '#0E1520', fontSize: '1.25rem' }}>→</span>
-            </div>
-          </Link>
+            </Link>
+          </motion.div>
+
+          {/* AI Таро расклад */}
+          <motion.div variants={revealNormal}>
+            <Link href="/tarot">
+              <div className="flex items-center justify-between rounded-xl px-5 py-4 transition-all cursor-pointer"
+                style={{ background: 'var(--bg-float)', border: '1px solid rgba(212,149,74,0.20)', boxShadow: '0 0 16px rgba(212,149,74,0.06)' }}>
+                <div>
+                  <p className="font-serif text-lg font-medium" style={{ color: 'var(--gold)' }}>Расклад Таро с AI</p>
+                  <p className="font-sans text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>AI-интерпретация от Lumier</p>
+                </div>
+                <span style={{ color: 'var(--gold)', fontSize: '1.25rem', opacity: 0.7 }}>◈</span>
+              </div>
+            </Link>
+          </motion.div>
+
+          {/* Новости и прогнозы */}
+          <motion.div variants={revealNormal}>
+            <Link href="/insights">
+              <div className="flex items-center justify-between rounded-xl px-5 py-4 transition-all cursor-pointer"
+                style={{ background: 'var(--bg-float)', border: '1px solid var(--border-subtle)' }}>
+                <div>
+                  <p className="font-serif text-base font-medium" style={{ color: 'var(--text-primary)' }}>Новости и прогнозы</p>
+                  <p className="font-sans text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>От экспертов Lumier</p>
+                </div>
+                <span style={{ color: 'var(--text-muted)', fontSize: '1rem' }}>✧</span>
+              </div>
+            </Link>
+          </motion.div>
         </motion.div>
 
         {/* Активные сессии */}
