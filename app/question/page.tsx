@@ -72,7 +72,16 @@ export default function QuestionPage() {
       className="flex min-h-screen flex-col" style={{ background: 'var(--bg-base)' }}>
 
       <div className="flex items-center justify-between px-5 pt-14">
-        <p className="font-serif text-xl font-light" style={{ color: 'var(--text-primary)', letterSpacing: '0.04em' }}>Lumier</p>
+        <div className="flex items-center gap-4">
+          <button onClick={() => router.push('/cabinet')}
+            className="font-sans text-xs uppercase tracking-widest transition-opacity hover:opacity-60"
+            style={{ color: 'var(--text-muted)' }}>
+            ←
+          </button>
+          <Link href="/cabinet">
+            <p className="font-serif text-xl font-light" style={{ color: 'var(--text-primary)', letterSpacing: '0.04em' }}>Lumier</p>
+          </Link>
+        </div>
         <Link href="/insights" className="label-overline transition-opacity hover:opacity-60" style={{ color: 'var(--text-muted)' }}>
           Статьи
         </Link>
