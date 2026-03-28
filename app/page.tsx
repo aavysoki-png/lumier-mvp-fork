@@ -70,7 +70,7 @@ export default function OnboardingPage() {
 
 function HeroScreen({ onTry, router }: { onTry: () => void; router: ReturnType<typeof useRouter> }) {
   const features = [
-    { icon: '◈', title: 'ИИ нового поколения',      text: 'Передовые модели анализируют контекст вашей ситуации и дают персональные инсайты' },
+    { icon: '◈', title: 'AI нового поколения',      text: 'Передовые модели анализируют контекст вашей ситуации и дают персональные инсайты' },
     { icon: '⚜', title: 'Живые эксперты',            text: 'Реальные консультанты с многолетним опытом, а не скрипты и чат-боты' },
     { icon: '✦', title: 'Настоящие результаты',      text: 'Структурированные разборы, которые помогают увидеть ситуацию с новой стороны' },
   ]
@@ -126,7 +126,7 @@ function HeroScreen({ onTry, router }: { onTry: () => void; router: ReturnType<t
           <h1 className="font-serif font-light leading-[1.08]"
             style={{ fontSize: 'clamp(2rem, 5vw, 3.2rem)', color: 'var(--text-primary)' }}>
             Ответы от передовых
-            <br />решений ИИ и лучших
+            <br />решений AI и лучших
             <br /><span style={{ color: 'var(--gold)' }}>экспертов</span>
           </h1>
 
@@ -137,7 +137,7 @@ function HeroScreen({ onTry, router }: { onTry: () => void; router: ReturnType<t
             className="mt-5 font-sans text-sm md:text-base leading-[1.7] max-w-md"
             style={{ color: 'var(--text-secondary)' }}
           >
-            Lumier объединяет мощь передового ИИ, мистические символы
+            Lumier объединяет мощь передового AI, мистические символы
             и&nbsp;опыт живых экспертов — чтобы дать вам ответы
             в&nbsp;моменты, когда они важнее всего
           </motion.p>
