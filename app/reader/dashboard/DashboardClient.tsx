@@ -40,12 +40,17 @@ export function DashboardClient({ user, sessions, telegramLinked = false }: { us
   const [accepting, setAccepting] = useState<string | null>(null)
   const [filter, setFilter] = useState<'ALL' | 'PENDING' | 'ACTIVE' | 'COMPLETED'>('ALL')
 
-  const pending   = sessions.filter(s => s.status === 'PENDING')
-  const active    = sessions.filter(s => s.status === 'ACTIVE')
-  const completed = sessions.filter(s => s.status === 'COMPLETED')
+  const [showArchive, setShowArchive] = useState(false)
+  const cutoff = Date.now() - 24 * 60 * 60 * 1000
 
-  const filtered = filter === 'ALL' ? sessions
-    : sessions.filter(s => s.status === filter)
+  const recent   = sessions.filter(s => new Date(s.createdAt).getTime() > cutoff)
+  const archived = sessions.filter(s => new Date(s.createdAt).getTime() <= cutoff)
+
+  const pending   = recent.filter(s => s.status === 'PENDING')
+  const active    = recent.filter(s => s.status === 'ACTIVE')
+
+  const filtered = filter === 'ALL' ? recent
+    : recent.filter(s => s.status === filter)
 
   const totalEarned = sessions
     .filter(s => s.status === 'COMPLETED' && s.order?.status === 'PAID')
@@ -206,6 +211,54 @@ export function DashboardClient({ user, sessions, telegramLinked = false }: { us
             )}
           </div>
         </motion.div>
+
+        {/* Архив */}
+        {archived.length > 0 && (
+          <motion.div variants={revealNormal} initial="hidden" animate="visible">
+            <button onClick={() => setShowArchive(!showArchive)}
+              className="w-full flex items-center justify-between py-3">
+              <div className="flex items-center gap-2">
+                <p className="label-overline" style={{ color: 'var(--text-muted)' }}>Архив</p>
+                <span className="rounded-full px-2 py-0.5 font-sans text-[0.6rem]"
+                  style={{ background: 'var(--bg-raised)', color: 'var(--text-muted)' }}>
+                  {archived.length}
+                </span>
+              </div>
+              <span className="font-sans text-xs transition-transform"
+                style={{ color: 'var(--text-muted)', transform: showArchive ? 'rotate(180deg)' : '' }}>
+                ▾
+              </span>
+            </button>
+
+            {showArchive && (
+              <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }}
+                className="space-y-2 pb-4">
+                <p className="font-sans text-xs mb-2" style={{ color: 'var(--text-muted)' }}>
+                  Консультации старше 24 часов
+                </p>
+                {archived.map(s => (
+                  <div key={s.id} className="rounded-xl px-4 py-3"
+                    style={{ background: 'var(--bg-raised)', border: '1px solid var(--border-subtle)', opacity: 0.7 }}>
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1 min-w-0">
+                        <p className="font-serif text-sm font-medium" style={{ color: 'var(--text-primary)' }}>{s.user.name}</p>
+                        <p className="font-sans text-xs" style={{ color: 'var(--text-muted)' }}>
+                          {new Date(s.createdAt).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
+                          {' · '}{s.status === 'COMPLETED' ? 'Завершена' : s.status === 'ACTIVE' ? 'Активна' : s.status}
+                        </p>
+                      </div>
+                      <button onClick={() => router.push(`/reader/session/${s.id}`)}
+                        className="rounded-lg px-3 py-1 font-sans text-xs"
+                        style={{ background: 'var(--bg-float)', color: 'var(--text-muted)', border: '1px solid var(--border-subtle)' }}>
+                        Открыть
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </motion.div>
+            )}
+          </motion.div>
+        )}
 
         {/* Author role request */}
         {user.role === 'READER' && (
