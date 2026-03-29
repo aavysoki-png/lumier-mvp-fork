@@ -134,7 +134,7 @@ export async function POST(req: Request) {
     const anthropic = new Anthropic({ apiKey })
     const message = await anthropic.messages.create({
       model: 'claude-haiku-4-5-20251001',
-      max_tokens: 1200,
+      max_tokens: 2000,
       system: SYSTEM_PROMPT,
       messages: [{
         role: 'user',
@@ -147,25 +147,44 @@ export async function POST(req: Request) {
       throw new Error('Пустой ответ от AI')
     }
 
-    // Strip markdown fences if present
+    // Extract and parse JSON from AI response
     let raw = textBlock.text.trim()
-    if (raw.startsWith('```')) {
-      raw = raw.replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/, '').trim()
+
+    // Strip markdown fences
+    raw = raw.replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/, '').trim()
+
+    // If response was truncated, try to close the JSON
+    if (!raw.endsWith('}')) {
+      // Try to find the last complete field and close the object
+      const lastBrace = raw.lastIndexOf('}')
+      if (lastBrace > 0) {
+        raw = raw.substring(0, lastBrace + 1)
+        // Close any unclosed arrays/objects
+        const openBrackets = (raw.match(/\[/g) || []).length - (raw.match(/\]/g) || []).length
+        const openBraces = (raw.match(/\{/g) || []).length - (raw.match(/\}/g) || []).length
+        for (let i = 0; i < openBrackets; i++) raw += ']'
+        for (let i = 0; i < openBraces; i++) raw += '}'
+      }
     }
 
     let reading: TarotReading
     try {
       reading = JSON.parse(raw)
     } catch {
+      // Last resort: extract fields manually via regex
+      const summary = raw.match(/"summary"\s*:\s*"([^"]*(?:\\.[^"]*)*)"/)?.[1]?.replace(/\\"/g, '"').replace(/\\n/g, '\n') || ''
+      const interpretation = raw.match(/"interpretation"\s*:\s*"([\s\S]*?)(?:"\s*,\s*"cards|"\s*\})/)?.[1]?.replace(/\\"/g, '"').replace(/\\n/g, '\n') || ''
+      const advice = raw.match(/"advice"\s*:\s*"([^"]*(?:\\.[^"]*)*)"/)?.[1]?.replace(/\\"/g, '"').replace(/\\n/g, '\n') || ''
+
       reading = {
-        summary: '',
-        interpretation: raw,
+        summary,
+        interpretation,
         cards: drawnCards.map(c => ({
           position: SPREAD_LABELS[c.position].ru,
           name: c.nameRu,
           insight: '',
         })),
-        advice: '',
+        advice,
       }
     }
 
