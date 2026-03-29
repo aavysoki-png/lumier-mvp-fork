@@ -76,6 +76,48 @@ export async function POST(req: Request) {
       )
     }
 
+    // ── Check free readings / balance ────────────────────────────
+    const READING_PRICE = 30 // рублей
+    const session = await getServerSession().catch(() => null)
+    let chargedUser = false
+
+    if (session?.id) {
+      const user = await prisma.user.findUnique({
+        where: { id: session.id },
+        select: { freeReadings: true, balance: true },
+      })
+
+      if (user) {
+        if (user.freeReadings > 0) {
+          // Use free reading
+          await prisma.user.update({
+            where: { id: session.id },
+            data: { freeReadings: { decrement: 1 } },
+          })
+        } else if (user.balance >= READING_PRICE) {
+          // Charge from balance
+          await prisma.user.update({
+            where: { id: session.id },
+            data: { balance: { decrement: READING_PRICE } },
+          })
+          await prisma.walletTransaction.create({
+            data: {
+              userId: session.id,
+              amount: -READING_PRICE,
+              type: 'reading',
+              note: 'AI-расклад Таро',
+            },
+          })
+          chargedUser = true
+        } else {
+          return NextResponse.json(
+            { error: 'insufficient_balance', message: `Недостаточно средств. Стоимость расклада — ${READING_PRICE} ₽. Пополните баланс.` },
+            { status: 402 },
+          )
+        }
+      }
+    }
+
     const drawnCards = drawCards(6)
 
     const anthropic = new Anthropic({ apiKey })
@@ -117,7 +159,6 @@ export async function POST(req: Request) {
     }
 
     // Save for authenticated users (fire-and-forget)
-    const session = await getServerSession().catch(() => null)
     if (session?.id) {
       prisma.tarotReadingRecord.create({
         data: {

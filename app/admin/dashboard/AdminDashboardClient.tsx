@@ -117,7 +117,7 @@ function PendingCard({ reader, onRefresh }: { reader: Reader; onRefresh: () => v
         <InfoField label="Специализация" value={reader.specialization} />
         <InfoField label="Опыт" value={reader.experience} />
         <InfoField label="Методы" value={reader.methods} />
-        <InfoField label="Цена" value={`$${reader.price}`} />
+        <InfoField label="Цена" value={`${reader.price} ₽`} />
         <InfoField label="Телефон" value={reader.phone} />
       </div>
 
@@ -158,7 +158,7 @@ function ReaderRow({ reader, onRefresh }: { reader: Reader; onRefresh: () => voi
           </span>
         </div>
         <p className="font-sans text-xs" style={{ color: 'var(--text-muted)' }}>
-          {reader.specialization} · ${reader.price} · {reader.user.email}
+          {reader.specialization} · {reader.price} ₽ · {reader.user.email}
         </p>
       </div>
       <button

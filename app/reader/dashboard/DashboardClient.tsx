@@ -97,7 +97,7 @@ export function DashboardClient({ user, sessions, telegramLinked = false }: { us
           {[
             { label: 'Новых', value: pending.length, color: 'var(--gold)' },
             { label: 'В работе', value: active.length, color: '#60B8CE' },
-            { label: 'Заработано', value: `$${totalEarned}`, color: '#4ADE80' },
+            { label: 'Заработано', value: `${totalEarned} ₽`, color: '#4ADE80' },
           ].map((stat) => (
             <motion.div key={stat.label} variants={revealNormal}
               className="rounded-xl px-4 py-4 text-center"
@@ -274,7 +274,7 @@ function SessionRow({
           )}
           <p className="font-sans text-xs mt-1" style={{ color: 'var(--text-muted)' }}>
             {new Date(session.createdAt).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
-            {session.order && ` · $${session.order.amount}`}
+            {session.order && ` · ${session.order.amount} ₽`}
           </p>
         </div>
 

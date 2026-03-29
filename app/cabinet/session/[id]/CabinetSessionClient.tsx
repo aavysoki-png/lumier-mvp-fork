@@ -73,7 +73,7 @@ export function CabinetSessionClient({
               </div>
               {session.order && (
                 <p className="font-serif text-xl font-light flex-shrink-0" style={{ color: 'var(--text-primary)' }}>
-                  ${session.order.amount}
+                  {session.order.amount} ₽
                 </p>
               )}
             </div>

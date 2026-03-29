@@ -1,8 +1,10 @@
 'use client'
 
+import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { logout } from '@/server/actions/auth'
+import { topUpBalance } from '@/server/actions/wallet'
 import { pageIn, staggerNormal, revealNormal, revealSubtle } from '@/shared/animations/variants'
 import Link from 'next/link'
 
@@ -44,7 +46,15 @@ interface TarotHistoryItem {
   createdAt: Date | string
 }
 
-export function CabinetClient({ user, sessions, tarotHistory = [] }: { user: User; sessions: Session[]; tarotHistory?: TarotHistoryItem[] }) {
+interface WalletInfo {
+  balance: number
+  freeReadings: number
+  transactions: { id: string; amount: number; type: string; note: string | null; createdAt: string | Date }[]
+}
+
+export function CabinetClient({ user, sessions, tarotHistory = [], wallet }: {
+  user: User; sessions: Session[]; tarotHistory?: TarotHistoryItem[]; wallet?: WalletInfo | null
+}) {
   const router = useRouter()
 
   const active   = sessions.filter(s => s.status === 'ACTIVE' || s.status === 'PENDING')
@@ -129,6 +139,9 @@ export function CabinetClient({ user, sessions, tarotHistory = [] }: { user: Use
             </Link>
           </motion.div>
         </motion.div>
+
+        {/* Кошелёк */}
+        {wallet && <WalletSection wallet={wallet} />}
 
         {/* Активные сессии */}
         {active.length > 0 && (
@@ -259,7 +272,7 @@ function SessionCard({ session, onClick }: { session: Session; onClick: () => vo
         <div className="text-right flex-shrink-0">
           {session.order && (
             <p className="font-serif text-base font-light" style={{ color: 'var(--text-primary)' }}>
-              ${session.order.amount}
+              {session.order.amount} ₽
             </p>
           )}
           <p className="font-sans text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
@@ -284,6 +297,113 @@ function SessionCard({ session, onClick }: { session: Session; onClick: () => vo
           <p className="font-sans text-xs" style={{ color: '#4ADE80' }}>Расклад готов — нажмите для просмотра</p>
         </div>
       )}
+    </motion.div>
+  )
+}
+
+function WalletSection({ wallet }: { wallet: WalletInfo }) {
+  const router = useRouter()
+  const [showTopUp, setShowTopUp] = useState(false)
+  const [amount, setAmount] = useState('')
+  const [isPending, startTransition] = useTransition()
+  const [msg, setMsg] = useState('')
+
+  function handleTopUp() {
+    const val = parseInt(amount)
+    if (!val || val <= 0) return
+    setMsg('')
+    startTransition(async () => {
+      const result = await topUpBalance(val)
+      if (result.success) { setMsg(result.success); setAmount(''); router.refresh() }
+      if (result.error) setMsg(result.error)
+    })
+  }
+
+  return (
+    <motion.div variants={staggerNormal} initial="hidden" animate="visible">
+      <motion.p variants={revealSubtle} className="label-overline mb-3" style={{ color: 'var(--text-muted)' }}>
+        Кошелёк
+      </motion.p>
+
+      <motion.div variants={revealNormal} className="rounded-xl p-5"
+        style={{ background: 'var(--bg-float)', border: '1px solid var(--border-subtle)' }}>
+
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <p className="font-serif text-2xl font-light" style={{ color: 'var(--text-primary)' }}>
+              {wallet.balance} ₽
+            </p>
+            <p className="font-sans text-xs" style={{ color: 'var(--text-muted)' }}>
+              {wallet.freeReadings > 0
+                ? `${wallet.freeReadings} бесплатных расклада`
+                : 'Бесплатные расклады использованы'}
+            </p>
+          </div>
+          <button onClick={() => setShowTopUp(!showTopUp)}
+            className="rounded-lg px-4 py-2 font-sans text-xs font-medium"
+            style={{ background: 'var(--gold)', color: '#0E1520' }}>
+            Пополнить
+          </button>
+        </div>
+
+        {showTopUp && (
+          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
+            className="mb-4 space-y-3">
+            <div className="flex gap-2">
+              {[100, 300, 500, 1000].map(v => (
+                <button key={v} onClick={() => setAmount(String(v))}
+                  className="flex-1 rounded-lg py-2 font-sans text-xs transition-all"
+                  style={{
+                    background: amount === String(v) ? 'rgba(212,149,74,0.15)' : 'var(--bg-raised)',
+                    color: amount === String(v) ? 'var(--gold)' : 'var(--text-secondary)',
+                    border: `1px solid ${amount === String(v) ? 'rgba(212,149,74,0.25)' : 'var(--border-subtle)'}`,
+                  }}>
+                  {v} ₽
+                </button>
+              ))}
+            </div>
+            <div className="flex gap-2">
+              <input value={amount} onChange={e => setAmount(e.target.value.replace(/\D/g, ''))}
+                placeholder="Другая сумма" type="text" inputMode="numeric"
+                className="flex-1 rounded-lg px-3 py-2 font-sans text-xs outline-none"
+                style={{ background: 'var(--bg-raised)', border: '1px solid var(--border-subtle)', color: 'var(--text-primary)' }} />
+              <button onClick={handleTopUp} disabled={isPending || !amount}
+                className="rounded-lg px-4 py-2 font-sans text-xs font-medium disabled:opacity-40"
+                style={{ background: 'var(--gold)', color: '#0E1520' }}>
+                {isPending ? '...' : 'Пополнить'}
+              </button>
+            </div>
+            {msg && <p className="font-sans text-xs text-center" style={{ color: msg.includes('Ошибка') ? '#F87171' : '#4ADE80' }}>{msg}</p>}
+            <p className="font-sans text-[0.65rem] text-center" style={{ color: 'var(--text-muted)' }}>
+              Стоимость AI-расклада — 30 ₽
+            </p>
+          </motion.div>
+        )}
+
+        {/* Transaction history */}
+        {wallet.transactions.length > 0 && (
+          <div className="space-y-1.5">
+            <p className="font-sans text-[0.6rem] uppercase tracking-wider mb-2" style={{ color: 'var(--text-muted)' }}>
+              Последние операции
+            </p>
+            {wallet.transactions.slice(0, 5).map(tx => (
+              <div key={tx.id} className="flex items-center justify-between py-1.5"
+                style={{ borderBottom: '1px solid var(--border-subtle)' }}>
+                <div>
+                  <p className="font-sans text-xs" style={{ color: 'var(--text-secondary)' }}>{tx.note || tx.type}</p>
+                  <p className="font-sans text-[0.6rem]" style={{ color: 'var(--text-muted)' }}>
+                    {new Date(tx.createdAt).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
+                  </p>
+                </div>
+                <p className="font-sans text-xs font-medium"
+                  style={{ color: tx.amount > 0 ? '#4ADE80' : '#F87171' }}>
+                  {tx.amount > 0 ? '+' : ''}{tx.amount} ₽
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
+      </motion.div>
     </motion.div>
   )
 }

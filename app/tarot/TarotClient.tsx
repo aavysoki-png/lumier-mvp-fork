@@ -79,7 +79,14 @@ export function TarotClient() {
         body: JSON.stringify({ question: question.trim(), category, gender }),
       })
       const data = await res.json()
-      if (!res.ok) throw new Error(data.error || 'Ошибка')
+      if (!res.ok) {
+        if (data.error === 'insufficient_balance') {
+          setError(data.message || 'Недостаточно средств. Пополните баланс в личном кабинете.')
+          setPhase('question')
+          return
+        }
+        throw new Error(data.error || data.message || 'Ошибка')
+      }
       setCards(data.drawnCards)
       setReading(data.reading)
       setApiDone(true)

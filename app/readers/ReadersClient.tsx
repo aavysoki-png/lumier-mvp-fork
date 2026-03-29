@@ -172,7 +172,7 @@ export function ReadersClient({ readers }: { readers: Reader[] }) {
                   </p>
                 </div>
                 <p className="font-serif text-xl font-light" style={{ color: 'var(--text-primary)' }}>
-                  ${selectedReader.price}
+                  {selectedReader.price} ₽
                 </p>
               </div>
               {error && <p className="font-sans text-xs text-center mb-2" style={{ color: '#F87171' }}>{error}</p>}
@@ -268,7 +268,7 @@ function ReaderCard({
 
           <div className="flex-shrink-0 text-right pt-0.5">
             <p className="font-serif text-xl font-light" style={{ color: 'var(--text-primary)' }}>
-              ${reader.price}
+              {reader.price} ₽
             </p>
             <div className="flex items-center justify-end gap-1 mt-1">
               <span style={{ color: 'var(--gold)', fontSize: 10 }}>★</span>

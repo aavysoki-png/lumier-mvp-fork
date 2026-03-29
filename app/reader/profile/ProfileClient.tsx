@@ -116,7 +116,7 @@ export function ProfileClient({ profile }: { profile: Profile }) {
 
             <Input label="Опыт работы" value={f.experience} onChange={e => set('experience', e.target.value)} />
             <Input label="Методы и подходы" value={f.methods} onChange={e => set('methods', e.target.value)} />
-            <Input label="Стоимость консультации ($)" type="number" value={f.price} onChange={e => set('price', e.target.value)} />
+            <Input label="Стоимость консультации (₽)" type="number" value={f.price} onChange={e => set('price', e.target.value)} />
             <Textarea label="Краткое описание" value={f.bio} onChange={e => set('bio', e.target.value)} rows={3} />
             <Textarea label="Подробнее о вас" value={f.about} onChange={e => set('about', e.target.value)} rows={4} />
           </motion.div>
