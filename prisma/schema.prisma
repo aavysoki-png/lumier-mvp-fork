@@ -16,6 +16,7 @@ model User {
   passwordHash String?
   role         UserRole  @default(CLIENT)
   dateOfBirth  DateTime?
+  gender       String    @default("unspecified")
   balance      Float     @default(0)
   freeReadings Int       @default(2)
   loginAttempts Int       @default(0)

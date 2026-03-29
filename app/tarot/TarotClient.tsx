@@ -4,7 +4,7 @@ import { useState, useCallback, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  type DrawnCard, type TarotReading, type Gender,
+  type DrawnCard, type TarotReading,
   SPREAD_LABELS, SUIT_SYMBOLS, SPREAD_ORDER,
 } from '@/entities/tarot'
 import { MAJOR_SYMBOLS, ROMAN } from '@/entities/tarot/deck'
@@ -27,20 +27,6 @@ function paragraphs(text: string): string[] {
   return clean(text).split(/\n\n+/).filter(p => p.trim().length > 0)
 }
 
-const CATEGORIES = [
-  { id: 'relationships', label: 'Отношения' },
-  { id: 'career',        label: 'Карьера' },
-  { id: 'growth',        label: 'Рост' },
-  { id: 'future',        label: 'Будущее' },
-  { id: 'general',       label: 'Общее' },
-]
-
-const GENDERS: { id: Gender; label: string }[] = [
-  { id: 'male',        label: 'Мужчина' },
-  { id: 'female',      label: 'Женщина' },
-  { id: 'unspecified', label: 'Не указывать' },
-]
-
 // Suit gradient accents for card backgrounds
 const SUIT_GRADIENTS: Record<string, string> = {
   wands:     'linear-gradient(170deg, #2A1A0A 0%, #1A1008 100%)',
@@ -55,8 +41,6 @@ export function TarotClient() {
   const router = useRouter()
   const [phase, setPhase] = useState<Phase>('question')
   const [question, setQuestion] = useState('')
-  const [category, setCategory] = useState('general')
-  const [gender, setGender] = useState<Gender>('unspecified')
   const [error, setError] = useState('')
 
   const [cards, setCards] = useState<DrawnCard[]>([])
@@ -76,7 +60,7 @@ export function TarotClient() {
       const res = await fetch('/api/tarot-reading', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question: question.trim(), category, gender }),
+        body: JSON.stringify({ question: question.trim() }),
       })
       const data = await res.json()
       if (!res.ok) {
@@ -94,7 +78,7 @@ export function TarotClient() {
       setError(err instanceof Error ? err.message : 'Ошибка соединения')
       setPhase('question')
     }
-  }, [question, category, gender])
+  }, [question])
 
   useEffect(() => {
     if (phase !== 'drawing' || cards.length === 0) return
@@ -133,8 +117,6 @@ export function TarotClient() {
         <AnimatePresence mode="wait">
           {phase === 'question' && (
             <QuestionPhase key="q" question={question} setQuestion={setQuestion}
-              category={category} setCategory={setCategory}
-              gender={gender} setGender={setGender}
               error={error} onSubmit={handleSubmit} />
           )}
           {phase === 'drawing' && (
@@ -158,11 +140,9 @@ export function TarotClient() {
 // ═══════════════════════════════════════════════════════════════════════════════
 
 function QuestionPhase({
-  question, setQuestion, category, setCategory, gender, setGender, error, onSubmit,
+  question, setQuestion, error, onSubmit,
 }: {
   question: string; setQuestion: (q: string) => void
-  category: string; setCategory: (c: string) => void
-  gender: Gender; setGender: (g: Gender) => void
   error: string; onSubmit: () => void
 }) {
   return (
@@ -180,39 +160,6 @@ function QuestionPhase({
         <p className="font-sans text-sm" style={{ color: 'var(--text-secondary)', lineHeight: 1.7 }}>
           Чем точнее вы сформулируете вопрос — тем глубже и полезнее будет ответ
         </p>
-      </div>
-
-      {/* Gender */}
-      <div className="space-y-2">
-        <p className="label-overline text-center" style={{ color: 'var(--text-muted)' }}>Ваш пол</p>
-        <div className="flex justify-center gap-2">
-          {GENDERS.map((g) => (
-            <button key={g.id} onClick={() => setGender(g.id)}
-              className="rounded-full px-4 py-1.5 font-sans text-xs font-medium transition-all"
-              style={{
-                background: g.id === gender ? 'var(--gold)' : 'var(--bg-raised)',
-                color: g.id === gender ? '#0E1520' : 'var(--text-secondary)',
-                border: g.id === gender ? '1px solid transparent' : '1px solid var(--border-subtle)',
-              }}>
-              {g.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Category */}
-      <div className="flex flex-wrap justify-center gap-2">
-        {CATEGORIES.map((cat) => (
-          <button key={cat.id} onClick={() => setCategory(cat.id)}
-            className="rounded-full px-4 py-1.5 font-sans text-xs font-medium transition-all"
-            style={{
-              background: cat.id === category ? 'rgba(212,149,74,0.15)' : 'var(--bg-raised)',
-              color: cat.id === category ? 'var(--gold)' : 'var(--text-secondary)',
-              border: `1px solid ${cat.id === category ? 'rgba(212,149,74,0.25)' : 'var(--border-subtle)'}`,
-            }}>
-            {cat.label}
-          </button>
-        ))}
       </div>
 
       {/* Input */}

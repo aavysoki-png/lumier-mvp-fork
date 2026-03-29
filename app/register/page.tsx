@@ -8,9 +8,16 @@ import { Input } from '@/shared/ui/Input'
 import { pageIn, staggerNormal, revealHero, revealNormal } from '@/shared/animations/variants'
 import Link from 'next/link'
 
+const GENDERS = [
+  { id: 'male', label: 'Мужчина' },
+  { id: 'female', label: 'Женщина' },
+  { id: 'unspecified', label: 'Не указывать' },
+]
+
 export default function RegisterPage() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [gender, setGender] = useState('unspecified')
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -56,8 +63,25 @@ export default function RegisterPage() {
             <Input name="name" label="Имя" type="text" placeholder="Ваше имя" required />
             <Input name="email" label="Email" type="email" placeholder="you@example.com" required />
             <Input name="password" label="Пароль" type="password" placeholder="Минимум 6 символов" required />
-            <Input name="dateOfBirth" label="Дата рождения" type="date"
-              max={new Date().toISOString().split('T')[0]} />
+
+            {/* Gender */}
+            <div className="space-y-1.5">
+              <label className="label-overline block">Пол</label>
+              <div className="flex gap-2">
+                {GENDERS.map(g => (
+                  <button key={g.id} type="button" onClick={() => setGender(g.id)}
+                    className="flex-1 rounded-xl py-2.5 font-sans text-xs font-medium transition-all"
+                    style={{
+                      background: gender === g.id ? 'var(--gold)' : 'var(--bg-raised)',
+                      color: gender === g.id ? '#0E1520' : 'var(--text-secondary)',
+                      border: gender === g.id ? 'none' : '1px solid var(--border-subtle)',
+                    }}>
+                    {g.label}
+                  </button>
+                ))}
+              </div>
+              <input type="hidden" name="gender" value={gender} />
+            </div>
 
             {error && (
               <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }}

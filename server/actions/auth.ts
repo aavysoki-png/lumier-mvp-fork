@@ -70,6 +70,7 @@ export async function registerClient(formData: FormData) {
     password: formData.get('password') as string,
     dateOfBirth: formData.get('dateOfBirth') as string,
   }
+  const gender = (formData.get('gender') as string) || 'unspecified'
 
   const parsed = RegisterSchema.safeParse(raw)
   if (!parsed.success) return { error: 'Проверьте правильность заполнения полей' }
@@ -83,6 +84,7 @@ export async function registerClient(formData: FormData) {
       email: parsed.data.email,
       passwordHash: hashPassword(parsed.data.password),
       role: 'CLIENT',
+      gender,
       dateOfBirth: parsed.data.dateOfBirth ? new Date(parsed.data.dateOfBirth) : null,
     },
   })

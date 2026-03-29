@@ -72,7 +72,7 @@ export const maxDuration = 30
 
 export async function POST(req: Request) {
   try {
-    const { question, category, gender } = await req.json()
+    const { question } = await req.json()
 
     if (!question || typeof question !== 'string' || question.trim().length < 3) {
       return NextResponse.json(
@@ -92,14 +92,16 @@ export async function POST(req: Request) {
     // ── Check free readings / balance (atomic) ────────────────────
     const READING_PRICE = 30 // рублей
     const session = await getServerSession().catch(() => null)
+    let userGender = 'unspecified'
 
     if (session?.id) {
       try {
         await prisma.$transaction(async (tx) => {
           const user = await tx.user.findUniqueOrThrow({
             where: { id: session.id },
-            select: { freeReadings: true, balance: true },
+            select: { freeReadings: true, balance: true, gender: true },
           })
+          userGender = user.gender || 'unspecified'
 
           if (user.freeReadings > 0) {
             await tx.user.update({
@@ -138,7 +140,7 @@ export async function POST(req: Request) {
       system: SYSTEM_PROMPT,
       messages: [{
         role: 'user',
-        content: buildPrompt(question.trim(), category || 'общее', gender || 'unspecified', drawnCards),
+        content: buildPrompt(question.trim(), 'общее', userGender, drawnCards),
       }],
     })
 
@@ -194,7 +196,7 @@ export async function POST(req: Request) {
         data: {
           userId:         session.id,
           question:       question.trim(),
-          category:       category || 'general',
+          category:       'general',
           cardsJson:      JSON.stringify(drawnCards),
           summary:        reading.summary || '',
           interpretation: reading.interpretation || '',
