@@ -522,7 +522,7 @@ function SignupScreen({ router }: { router: ReturnType<typeof useRouter> }) {
             <br />для себя новое?
           </h2>
           <p className="font-sans text-sm" style={{ color: 'var(--text-secondary)' }}>
-            Получи 1 бесплатное предсказание от самого передового AI
+            Получи 2 бесплатных предсказания от самого передового AI
           </p>
         </div>
 
