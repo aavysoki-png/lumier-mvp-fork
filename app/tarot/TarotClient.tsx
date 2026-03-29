@@ -175,10 +175,10 @@ function QuestionPhase({
       <div className="text-center space-y-3">
         <p className="label-overline" style={{ color: 'var(--gold)' }}>Таро расклад</p>
         <h1 className="font-serif font-light" style={{ fontSize: '2rem', color: 'var(--text-primary)' }}>
-          О чём говорит ваше сердце?
+          Опишите вашу ситуацию
         </h1>
         <p className="font-sans text-sm" style={{ color: 'var(--text-secondary)', lineHeight: 1.7 }}>
-          Задайте вопрос — карты раскроют скрытое.
+          Чем точнее вы сформулируете вопрос — тем глубже и полезнее будет ответ
         </p>
       </div>
 
@@ -216,9 +216,10 @@ function QuestionPhase({
       </div>
 
       {/* Input */}
-      <div className="space-y-2">
+      <div className="space-y-3">
         <textarea value={question} onChange={(e) => setQuestion(e.target.value)}
-          placeholder="Я хочу понять..." rows={3} maxLength={500}
+          placeholder="Опишите ситуацию и что именно вы хотите понять..."
+          rows={4} maxLength={500}
           className="w-full rounded-2xl px-5 py-4 font-sans text-sm outline-none resize-none"
           style={{ background: 'var(--bg-raised)', border: '1px solid var(--border-subtle)', color: 'var(--text-primary)', lineHeight: 1.8 }}
           onFocus={(e) => { e.target.style.borderColor = 'rgba(212,149,74,0.4)'; e.target.style.boxShadow = '0 0 0 3px rgba(212,149,74,0.08)' }}
@@ -227,6 +228,24 @@ function QuestionPhase({
         <div className="flex justify-between px-1">
           <p className="font-sans text-xs" style={{ color: 'var(--text-muted)' }}>{question.length}/500</p>
           {error && <p className="font-sans text-xs" style={{ color: '#F87171' }}>{error}</p>}
+        </div>
+
+        {/* Hints */}
+        <div className="rounded-xl px-4 py-3" style={{ background: 'var(--bg-raised)', border: '1px solid var(--border-subtle)' }}>
+          <p className="font-sans text-xs font-medium mb-2" style={{ color: 'var(--text-secondary)' }}>
+            Как задать хороший вопрос:
+          </p>
+          <div className="space-y-1">
+            {[
+              '• Опишите конкретную ситуацию, а не абстрактную тему',
+              '• Укажите, что именно вас беспокоит или что вы хотите решить',
+              '• Вместо «Что ждёт?» — «Я выбираю между X и Y, что учесть?»',
+            ].map((hint, i) => (
+              <p key={i} className="font-sans text-[0.7rem] leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+                {hint}
+              </p>
+            ))}
+          </div>
         </div>
       </div>
 
