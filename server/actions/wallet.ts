@@ -25,38 +25,42 @@ export async function getWalletInfo() {
 export async function topUpBalance(amount: number) {
   const session = await getServerSession()
   if (!session) return { error: 'Необходима авторизация' }
-  if (amount <= 0 || amount > 100000) return { error: 'Некорректная сумма' }
+  if (!Number.isInteger(amount) || amount <= 0 || amount > 100000) return { error: 'Некорректная сумма' }
 
-  await prisma.user.update({
-    where: { id: session.id },
-    data: { balance: { increment: amount } },
-  })
-
-  await prisma.walletTransaction.create({
-    data: {
-      userId: session.id,
-      amount,
-      type: 'topup',
-      note: 'Пополнение баланса',
-    },
+  // Atomic transaction
+  await prisma.$transaction(async (tx) => {
+    await tx.user.update({
+      where: { id: session.id },
+      data: { balance: { increment: amount } },
+    })
+    await tx.walletTransaction.create({
+      data: { userId: session.id, amount, type: 'topup', note: 'Пополнение баланса' },
+    })
   })
 
   revalidatePath('/cabinet')
   return { success: `Баланс пополнен на ${amount} ₽` }
 }
 
-// Admin: add balance to any user
+// Admin: add balance to any user (with audit)
 export async function adminTopUp(userId: string, amount: number) {
   const session = await getServerSession()
   if (!session || session.role !== 'ADMIN') return { error: 'Forbidden' }
+  if (!Number.isInteger(amount) || amount <= 0 || amount > 100000) return { error: 'Некорректная сумма (1–100 000)' }
 
-  await prisma.user.update({
-    where: { id: userId },
-    data: { balance: { increment: amount } },
-  })
-
-  await prisma.walletTransaction.create({
-    data: { userId, amount, type: 'topup', note: 'Пополнение администратором' },
+  await prisma.$transaction(async (tx) => {
+    await tx.user.update({
+      where: { id: userId },
+      data: { balance: { increment: amount } },
+    })
+    await tx.walletTransaction.create({
+      data: {
+        userId,
+        amount,
+        type: 'admin_topup',
+        note: `Пополнение администратором (${session.email || session.id})`,
+      },
+    })
   })
 
   return { success: true }

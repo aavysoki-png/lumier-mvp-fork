@@ -129,14 +129,17 @@ export function DashboardClient({ user, sessions, telegramLinked = false }: { us
                 <p className="font-sans text-sm font-medium" style={{ color: 'var(--text-primary)' }}>Подключить Telegram</p>
                 <p className="font-sans text-xs" style={{ color: 'var(--text-muted)' }}>Отвечайте клиентам прямо из Telegram</p>
               </div>
-              <a
-                href={`https://t.me/lumier_consult_bot?start=${user.id}`}
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                onClick={async () => {
+                  const { generateTelegramLinkToken } = await import('@/server/actions/telegram-link')
+                  const result = await generateTelegramLinkToken()
+                  if (result.url) window.open(result.url, '_blank')
+                  if (result.error) alert(result.error)
+                }}
                 className="rounded-lg px-4 py-2 font-sans text-xs font-medium flex-shrink-0"
                 style={{ background: 'var(--gold)', color: '#0E1520' }}>
                 Подключить
-              </a>
+              </button>
             </div>
           )}
         </motion.div>

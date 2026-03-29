@@ -18,8 +18,10 @@ model User {
   dateOfBirth  DateTime?
   balance      Float     @default(0)
   freeReadings Int       @default(2)
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  loginAttempts Int       @default(0)
+  lockedUntil   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
   questions      Question[]
   sessions       Session[]
@@ -64,7 +66,9 @@ model TarotReader {
   imageUrl       String?
   isActive       Boolean         @default(true)
   approvalStatus ApprovalStatus  @default(PENDING)
-  telegramChatId String?         @unique
+  telegramChatId    String?   @unique
+  telegramLinkToken  String?   @unique
+  telegramLinkExpiry DateTime?
   phone          String?
   experience     String?         // years / description
   methods        String?         // comma-separated methods

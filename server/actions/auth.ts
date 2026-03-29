@@ -18,6 +18,36 @@ const LoginSchema = z.object({
   password: z.string().min(1),
 })
 
+const MAX_LOGIN_ATTEMPTS = 5
+const LOCKOUT_DURATION_MS = 15 * 60 * 1000 // 15 minutes
+
+async function checkLockout(user: { id: string; loginAttempts: number; lockedUntil: Date | null }) {
+  if (user.lockedUntil && user.lockedUntil > new Date()) {
+    const mins = Math.ceil((user.lockedUntil.getTime() - Date.now()) / 60000)
+    return { locked: true, error: `Аккаунт временно заблокирован. Попробуйте через ${mins} мин.` }
+  }
+  return { locked: false }
+}
+
+async function recordFailedLogin(userId: string, attempts: number) {
+  await prisma.user.update({
+    where: { id: userId },
+    data: {
+      loginAttempts: { increment: 1 },
+      lockedUntil: attempts + 1 >= MAX_LOGIN_ATTEMPTS
+        ? new Date(Date.now() + LOCKOUT_DURATION_MS)
+        : null,
+    },
+  })
+}
+
+async function resetLoginAttempts(userId: string) {
+  await prisma.user.update({
+    where: { id: userId },
+    data: { loginAttempts: 0, lockedUntil: null },
+  })
+}
+
 const ReaderRegisterSchema = z.object({
   name: z.string().min(2),
   email: z.string().email(),
@@ -71,9 +101,17 @@ export async function loginClient(formData: FormData) {
 
   const user = await prisma.user.findUnique({ where: { email: parsed.data.email } })
   if (!user || !user.passwordHash) return { error: 'Неверный email или пароль' }
-  if (!verifyPassword(parsed.data.password, user.passwordHash)) return { error: 'Неверный email или пароль' }
+
+  const lockout = await checkLockout(user)
+  if (lockout.locked) return { error: lockout.error! }
+
+  if (!verifyPassword(parsed.data.password, user.passwordHash)) {
+    await recordFailedLogin(user.id, user.loginAttempts)
+    return { error: 'Неверный email или пароль' }
+  }
   if (user.role !== 'CLIENT') return { error: 'Используйте вход для консультантов' }
 
+  await resetLoginAttempts(user.id)
   const token = createSessionToken(user.id, user.role)
   setSessionCookie(token)
   redirect('/cabinet')
@@ -92,7 +130,16 @@ export async function loginReader(formData: FormData) {
   })
 
   if (!user || !user.passwordHash) return { error: 'Неверный email или пароль' }
-  if (!verifyPassword(parsed.data.password, user.passwordHash)) return { error: 'Неверный email или пароль' }
+
+  const lockout2 = await checkLockout(user)
+  if (lockout2.locked) return { error: lockout2.error! }
+
+  if (!verifyPassword(parsed.data.password, user.passwordHash)) {
+    await recordFailedLogin(user.id, user.loginAttempts)
+    return { error: 'Неверный email или пароль' }
+  }
+
+  await resetLoginAttempts(user.id)
 
   // Admin goes to admin dashboard
   if (user.role === 'ADMIN') {
