@@ -35,7 +35,7 @@ interface User {
   role: string
 }
 
-export function DashboardClient({ user, sessions }: { user: User; sessions: Session[] }) {
+export function DashboardClient({ user, sessions, telegramLinked = false }: { user: User; sessions: Session[]; telegramLinked?: boolean }) {
   const router = useRouter()
   const [accepting, setAccepting] = useState<string | null>(null)
   const [filter, setFilter] = useState<'ALL' | 'PENDING' | 'ACTIVE' | 'COMPLETED'>('ALL')
@@ -102,6 +102,39 @@ export function DashboardClient({ user, sessions }: { user: User; sessions: Sess
               <p className="label-overline mt-1" style={{ color: 'var(--text-muted)' }}>{stat.label}</p>
             </motion.div>
           ))}
+        </motion.div>
+
+        {/* Telegram */}
+        <motion.div variants={revealNormal} initial="hidden" animate="visible"
+          className="rounded-xl p-4"
+          style={{
+            background: telegramLinked ? 'rgba(74,222,128,0.06)' : 'var(--bg-float)',
+            border: `1px solid ${telegramLinked ? 'rgba(74,222,128,0.15)' : 'rgba(212,149,74,0.15)'}`,
+          }}>
+          {telegramLinked ? (
+            <div className="flex items-center gap-3">
+              <span style={{ fontSize: '1.2rem' }}>✓</span>
+              <div>
+                <p className="font-sans text-sm font-medium" style={{ color: '#4ADE80' }}>Telegram подключён</p>
+                <p className="font-sans text-xs" style={{ color: 'var(--text-muted)' }}>Сообщения клиентов приходят вам в Telegram</p>
+              </div>
+            </div>
+          ) : (
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="font-sans text-sm font-medium" style={{ color: 'var(--text-primary)' }}>Подключить Telegram</p>
+                <p className="font-sans text-xs" style={{ color: 'var(--text-muted)' }}>Отвечайте клиентам прямо из Telegram</p>
+              </div>
+              <a
+                href={`https://t.me/lumier_consult_bot?start=${user.id}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-lg px-4 py-2 font-sans text-xs font-medium flex-shrink-0"
+                style={{ background: 'var(--gold)', color: '#0E1520' }}>
+                Подключить
+              </a>
+            </div>
+          )}
         </motion.div>
 
         {/* Новые запросы */}

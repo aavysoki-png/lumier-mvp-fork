@@ -48,6 +48,7 @@ model TarotReader {
   imageUrl       String?
   isActive       Boolean         @default(true)
   approvalStatus ApprovalStatus  @default(PENDING)
+  telegramChatId String?         @unique
   phone          String?
   experience     String?         // years / description
   methods        String?         // comma-separated methods

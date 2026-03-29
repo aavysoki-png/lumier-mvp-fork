@@ -1,23 +1,13 @@
 import { prisma } from '@/shared/lib/prisma'
-import { NotFoundError } from '@/server/errors'
+import { sendTelegramMessage } from '@/shared/lib/telegram'
 import type { SendMessageInput } from './types'
-
-// Ответы консультанта для демо-режима (на русском)
-const READER_RESPONSES = [
-  'Я вытягиваю карту в ответ на то, что вы рассказали. Дайте мне момент.',
-  'Карты показывают мне кое-что интересное. То, что вы описываете, резонирует с Пятёркой Кубков — картой о том, как сидеть с тем, что утрачено, прежде чем увидеть то, что осталось.',
-  'Это значимо. Я хочу задать вам вопрос: когда вы представляете версию себя, принявшую это решение, как ощущается её жизнь?',
-  'Появилась Башня. Прежде чем вы ответите — это не карта катастрофы, хотя так может ощущаться. Это карта откровения. Нечто, что скрывало себя, вот-вот станет ясным.',
-  'Не торопитесь с этим. То, что вы переживаете, реально и заслуживает пространства.',
-  'Отшельник говорит о том, что вы уже знаете больше, чем кажется. Что бы вы сделали, если бы больше некого было убеждать?',
-  'Я вижу здесь Двойку Мечей — намеренная слепота. Не от слабости, а от страха, что ясное видение вынудит к выбору, к которому вы ещё не готовы. Вы готовы теперь?',
-]
 
 export async function sendMessage(input: SendMessageInput) {
   const message = await prisma.message.create({ data: input })
 
+  // If client sent a message, forward to reader's Telegram
   if (input.senderType === 'USER') {
-    await _scheduleReaderResponse(input.sessionId)
+    _forwardToTelegram(input.sessionId, input.content).catch(console.error)
   }
 
   return message
@@ -40,21 +30,32 @@ export async function sendReaderGreeting(sessionId: string, readerName: string) 
     data: {
       sessionId,
       senderType: 'READER',
-      content: `Добро пожаловать. Я ${readerName}. Я взял момент, чтобы сосредоточиться с вашим вопросом. Когда будете готовы, поделитесь тем, что кажется вам важным.`,
+      content: `Добро пожаловать. Я ${readerName}. Я готов работать с вашим вопросом. Расскажите, что вас волнует.`,
     },
   })
 }
 
-async function _scheduleReaderResponse(sessionId: string) {
-  const response =
-    READER_RESPONSES[Math.floor(Math.random() * READER_RESPONSES.length)]
+async function _forwardToTelegram(sessionId: string, clientMessage: string) {
+  try {
+    const session = await prisma.session.findUnique({
+      where: { id: sessionId },
+      include: {
+        reader: true,
+        user: { select: { name: true } },
+      },
+    })
 
-  await prisma.message.create({
-    data: {
-      sessionId,
-      senderType: 'READER',
-      content: response,
-      createdAt: new Date(Date.now() + 1200),
-    },
-  })
+    if (!session?.reader?.telegramChatId) return
+
+    const clientName = session.user.name || 'Клиент'
+    const text =
+      `📩 <b>Новое сообщение от клиента</b>\n\n` +
+      `👤 ${clientName}\n` +
+      `💬 ${clientMessage}\n\n` +
+      `<i>Ответьте прямо здесь — клиент увидит в приложении</i>`
+
+    await sendTelegramMessage(session.reader.telegramChatId, text)
+  } catch (err) {
+    console.error('Failed to forward to Telegram:', err)
+  }
 }
