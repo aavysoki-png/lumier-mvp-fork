@@ -526,31 +526,12 @@ function SignupScreen({ router }: { router: ReturnType<typeof useRouter> }) {
           </p>
         </div>
 
-        <div className="space-y-3 pt-2">
-          {/* Email */}
-          <motion.button whileHover={{ y: -2 }} whileTap={{ scale: 0.97 }}
-            onClick={() => router.push('/register')}
-            className="w-full rounded-2xl px-6 py-4 font-sans text-sm font-medium transition-all"
-            style={{ background: 'var(--gold)', color: '#0E1520', boxShadow: '0 0 20px rgba(212,149,74,0.18)' }}>
-            Продолжить по email
-          </motion.button>
-
-          {/* Apple */}
-          <motion.button whileHover={{ y: -1 }} whileTap={{ scale: 0.97 }}
-            className="w-full rounded-2xl px-6 py-3.5 font-sans text-sm transition-all flex items-center justify-center gap-2"
-            style={{ background: 'var(--bg-float)', border: '1px solid var(--border-subtle)', color: 'var(--text-primary)' }}>
-            <span style={{ fontSize: '1.1rem' }}></span>
-            Войти через Apple
-          </motion.button>
-
-          {/* Google */}
-          <motion.button whileHover={{ y: -1 }} whileTap={{ scale: 0.97 }}
-            className="w-full rounded-2xl px-6 py-3.5 font-sans text-sm transition-all flex items-center justify-center gap-2"
-            style={{ background: 'var(--bg-float)', border: '1px solid var(--border-subtle)', color: 'var(--text-primary)' }}>
-            <span style={{ fontSize: '0.9rem' }}>G</span>
-            Войти через Google
-          </motion.button>
-        </div>
+        <motion.button whileHover={{ y: -2 }} whileTap={{ scale: 0.97 }}
+          onClick={() => router.push('/register')}
+          className="w-full rounded-2xl px-6 py-4 font-sans text-sm font-medium transition-all mt-2"
+          style={{ background: 'var(--gold)', color: '#0E1520', boxShadow: '0 0 20px rgba(212,149,74,0.18)' }}>
+          Зарегистрироваться
+        </motion.button>
 
         <p className="font-sans text-xs pt-1" style={{ color: 'var(--text-muted)' }}>
           Уже есть аккаунт?{' '}
