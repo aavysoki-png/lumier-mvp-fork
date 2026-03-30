@@ -20,12 +20,30 @@ export default function RegisterPage() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [gender, setGender] = useState('unspecified')
+  const [dob, setDob] = useState('')
+
+  function formatDobInput(value: string) {
+    const digits = value.replace(/[^\d]/g, '')
+    let formatted = ''
+    if (digits.length <= 2) formatted = digits
+    else if (digits.length <= 4) formatted = digits.slice(0, 2) + '.' + digits.slice(2)
+    else formatted = digits.slice(0, 2) + '.' + digits.slice(2, 4) + '.' + digits.slice(4, 8)
+    setDob(formatted)
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setLoading(true)
     setError('')
     const formData = new FormData(e.currentTarget)
+    // Convert dd.mm.yyyy → ISO
+    if (dob) {
+      const parts = dob.split('.')
+      if (parts.length === 3) {
+        const [dd, mm, yyyy] = parts.map(Number)
+        formData.set('dateOfBirth', new Date(yyyy, mm - 1, dd).toISOString().split('T')[0])
+      }
+    }
     try {
       const result = await registerClient(formData)
       if (result?.error) setError(result.error)
@@ -87,6 +105,18 @@ export default function RegisterPage() {
               </div>
               <input type="hidden" name="gender" value={gender} />
             </div>
+
+            {/* Date of birth */}
+            <Input
+              label="Дата рождения"
+              type="text"
+              inputMode="numeric"
+              placeholder="дд.мм.гггг"
+              value={dob}
+              onChange={(e) => formatDobInput(e.target.value)}
+              maxLength={10}
+              required
+            />
 
             {error && (
               <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }}

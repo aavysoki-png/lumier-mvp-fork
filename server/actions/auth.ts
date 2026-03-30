@@ -11,7 +11,6 @@ const RegisterSchema = z.object({
   name: z.string().min(2),
   email: z.string().email(),
   password: z.string().min(6),
-  dateOfBirth: z.string().optional(),
 })
 
 const LoginSchema = z.object({
@@ -69,9 +68,9 @@ export async function registerClient(formData: FormData) {
     name: formData.get('name') as string,
     email: formData.get('email') as string,
     password: formData.get('password') as string,
-    dateOfBirth: formData.get('dateOfBirth') as string,
   }
   const gender = (formData.get('gender') as string) || 'unspecified'
+  const dateOfBirth = formData.get('dateOfBirth') as string | null
 
   const parsed = RegisterSchema.safeParse(raw)
   if (!parsed.success) return { error: 'Проверьте правильность заполнения полей' }
@@ -87,7 +86,7 @@ export async function registerClient(formData: FormData) {
       role: 'CLIENT',
       gender,
       emailVerified: false,
-      dateOfBirth: parsed.data.dateOfBirth ? new Date(parsed.data.dateOfBirth) : null,
+      dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : null,
     },
   })
 
