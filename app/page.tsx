@@ -208,6 +208,7 @@ function HeroScreen({ onTry, router }: { onTry: () => void; router: ReturnType<t
 // ═══════════════════════════════════════════════════════════════════════════════
 
 function AboutAIScreen({ onNext }: { onNext: () => void }) {
+  const router = useRouter()
   const [demoStep, setDemoStep] = useState<'idle' | 'shuffle' | 'reveal' | 'done'>('idle')
   const [demoQ, setDemoQ] = useState('')
   const [revealed, setRevealed] = useState(0)
@@ -374,9 +375,12 @@ function AboutAIScreen({ onNext }: { onNext: () => void }) {
                           style={{ color: 'var(--text-primary)' }}>
                           &ldquo;{DEMO_INSIGHT}&rdquo;
                         </p>
-                        <p className="font-sans text-[0.65rem] leading-[1.7]" style={{ color: 'var(--text-muted)' }}>
-                          Зарегистрируйтесь для полного разбора
-                        </p>
+                        <motion.button whileTap={{ scale: 0.97 }}
+                          onClick={() => router.push('/register')}
+                          className="w-full rounded-lg py-2 font-sans text-xs font-medium mt-1"
+                          style={{ background: 'var(--gold)', color: '#0E1520' }}>
+                          Получить полный разбор →
+                        </motion.button>
                       </motion.div>
                     )}
                   </motion.div>
@@ -385,12 +389,18 @@ function AboutAIScreen({ onNext }: { onNext: () => void }) {
             </motion.div>
           </div>
 
-          {/* Next button */}
+          {/* CTAs */}
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2 }}
-            className="mt-12 text-center">
-            <motion.button whileHover={{ y: -2 }} whileTap={{ scale: 0.97 }} onClick={onNext}
-              className="rounded-2xl px-10 py-3.5 font-sans text-sm font-medium"
-              style={{ background: 'var(--gold)', color: '#0E1520', boxShadow: '0 0 20px rgba(212,149,74,0.18)' }}>
+            className="mt-12 flex flex-col sm:flex-row gap-3 justify-center items-center">
+            <motion.button whileHover={{ y: -2 }} whileTap={{ scale: 0.97 }}
+              onClick={() => router.push('/register')}
+              className="rounded-2xl px-10 py-4 font-sans text-sm font-medium w-full sm:w-auto"
+              style={{ background: 'var(--gold)', color: '#0E1520', boxShadow: '0 0 24px rgba(212,149,74,0.20)' }}>
+              Попробовать бесплатно
+            </motion.button>
+            <motion.button whileHover={{ y: -1 }} whileTap={{ scale: 0.97 }} onClick={onNext}
+              className="rounded-2xl px-10 py-3.5 font-sans text-sm font-medium w-full sm:w-auto"
+              style={{ background: 'var(--bg-float)', border: '1px solid var(--border-subtle)', color: 'var(--text-secondary)' }}>
               Об экспертах →
             </motion.button>
           </motion.div>
@@ -405,6 +415,7 @@ function AboutAIScreen({ onNext }: { onNext: () => void }) {
 // ═══════════════════════════════════════════════════════════════════════════════
 
 function AboutExpertsScreen({ onNext }: { onNext: () => void }) {
+  const router = useRouter()
   const EXPERT_PARAGRAPHS = [
     'Наши эксперты — это специалисты высшего уровня с многолетним опытом и глубокой практикой, отобранные не по количеству, а по качеству. Мы сознательно строим не массовый сервис, а пространство точечной, внимательной работы с каждым запросом.',
     'Здесь нет потоковых консультаций и универсальных ответов. Каждый запрос рассматривается как уникальная ситуация, требующая индивидуального подхода, глубины и точности. Эксперты работают не по шаблонам — они вникают в контекст, улавливают нюансы и дают разбор, который действительно относится именно к вам.',
@@ -486,13 +497,19 @@ function AboutExpertsScreen({ onNext }: { onNext: () => void }) {
             </motion.div>
           </div>
 
-          {/* CTA */}
+          {/* CTAs */}
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.4 }}
-            className="mt-12 text-center">
-            <motion.button whileHover={{ y: -2 }} whileTap={{ scale: 0.97 }} onClick={onNext}
-              className="rounded-2xl px-10 py-4 font-sans text-sm font-medium"
+            className="mt-12 flex flex-col sm:flex-row gap-3 justify-center items-center">
+            <motion.button whileHover={{ y: -2 }} whileTap={{ scale: 0.97 }}
+              onClick={() => router.push('/register')}
+              className="rounded-2xl px-10 py-4 font-sans text-sm font-medium w-full sm:w-auto"
               style={{ background: 'var(--gold)', color: '#0E1520', boxShadow: '0 0 24px rgba(212,149,74,0.20)' }}>
-              Зарегистрироваться
+              Зарегистрироваться бесплатно
+            </motion.button>
+            <motion.button whileHover={{ y: -1 }} whileTap={{ scale: 0.97 }} onClick={onNext}
+              className="rounded-2xl px-10 py-3.5 font-sans text-sm font-medium w-full sm:w-auto"
+              style={{ background: 'var(--bg-float)', border: '1px solid var(--border-subtle)', color: 'var(--text-secondary)' }}>
+              Войти
             </motion.button>
           </motion.div>
         </div>
