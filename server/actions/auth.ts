@@ -3,6 +3,7 @@
 import { prisma } from '@/shared/lib/prisma'
 import { hashPassword, verifyPassword } from '@/shared/lib/password'
 import { createSessionToken, setSessionCookie, clearSessionCookie } from '@/shared/lib/auth'
+import { sendVerificationCode } from '@/shared/lib/email'
 import { z } from 'zod'
 import { redirect } from 'next/navigation'
 
@@ -85,13 +86,85 @@ export async function registerClient(formData: FormData) {
       passwordHash: hashPassword(parsed.data.password),
       role: 'CLIENT',
       gender,
+      emailVerified: false,
       dateOfBirth: parsed.data.dateOfBirth ? new Date(parsed.data.dateOfBirth) : null,
     },
+  })
+
+  // Send verification code
+  const code = String(Math.floor(100000 + Math.random() * 900000))
+  await prisma.emailVerification.create({
+    data: {
+      email: parsed.data.email,
+      code,
+      expiresAt: new Date(Date.now() + 10 * 60 * 1000), // 10 min
+    },
+  })
+
+  try {
+    await sendVerificationCode(parsed.data.email, code)
+  } catch (err) {
+    console.error('Failed to send verification:', err)
+  }
+
+  return { needsVerification: true, email: parsed.data.email }
+}
+
+// ─── Verify email code ────────────────────────────────────────────────────────
+
+export async function verifyEmailCode(email: string, code: string) {
+  const record = await prisma.emailVerification.findFirst({
+    where: { email, code, used: false, expiresAt: { gt: new Date() } },
+    orderBy: { createdAt: 'desc' },
+  })
+
+  if (!record) return { error: 'Неверный или истёкший код' }
+
+  await prisma.emailVerification.update({
+    where: { id: record.id },
+    data: { used: true },
+  })
+
+  const user = await prisma.user.findUnique({ where: { email } })
+  if (!user) return { error: 'Пользователь не найден' }
+
+  await prisma.user.update({
+    where: { id: user.id },
+    data: { emailVerified: true },
   })
 
   const token = createSessionToken(user.id, user.role)
   setSessionCookie(token)
   redirect('/cabinet')
+}
+
+// ─── Resend verification code ─────────────────────────────────────────────────
+
+export async function resendVerificationCode(email: string) {
+  const user = await prisma.user.findUnique({ where: { email } })
+  if (!user) return { error: 'Пользователь не найден' }
+  if (user.emailVerified) return { error: 'Email уже подтверждён' }
+
+  // Rate limit: check last code
+  const lastCode = await prisma.emailVerification.findFirst({
+    where: { email },
+    orderBy: { createdAt: 'desc' },
+  })
+  if (lastCode && Date.now() - lastCode.createdAt.getTime() < 60000) {
+    return { error: 'Подождите минуту перед повторной отправкой' }
+  }
+
+  const code = String(Math.floor(100000 + Math.random() * 900000))
+  await prisma.emailVerification.create({
+    data: { email, code, expiresAt: new Date(Date.now() + 10 * 60 * 1000) },
+  })
+
+  try {
+    await sendVerificationCode(email, code)
+    return { success: 'Код отправлен повторно' }
+  } catch {
+    return { error: 'Не удалось отправить код' }
+  }
 }
 
 // ─── Client login ─────────────────────────────────────────────────────────────
@@ -112,6 +185,17 @@ export async function loginClient(formData: FormData) {
     return { error: 'Неверный email или пароль' }
   }
   if (user.role !== 'CLIENT') return { error: 'Используйте вход для консультантов' }
+
+  // Check email verification
+  if (!user.emailVerified) {
+    // Send a new code
+    const code = String(Math.floor(100000 + Math.random() * 900000))
+    await prisma.emailVerification.create({
+      data: { email: parsed.data.email, code, expiresAt: new Date(Date.now() + 10 * 60 * 1000) },
+    })
+    try { await sendVerificationCode(parsed.data.email, code) } catch {}
+    return { needsVerification: true, email: parsed.data.email }
+  }
 
   await resetLoginAttempts(user.id)
   const token = createSessionToken(user.id, user.role)

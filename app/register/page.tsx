@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { registerClient } from '@/server/actions/auth'
 import { Button } from '@/shared/ui/Button'
@@ -15,6 +16,7 @@ const GENDERS = [
 ]
 
 export default function RegisterPage() {
+  const router = useRouter()
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [gender, setGender] = useState('unspecified')
@@ -27,6 +29,9 @@ export default function RegisterPage() {
     try {
       const result = await registerClient(formData)
       if (result?.error) setError(result.error)
+      if (result?.needsVerification && result?.email) {
+        router.push(`/verify-email?email=${encodeURIComponent(result.email)}`)
+      }
     } catch {}
     finally { setLoading(false) }
   }

@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { loginClient } from '@/server/actions/auth'
 import { Button } from '@/shared/ui/Button'
 import { Input } from '@/shared/ui/Input'
@@ -10,6 +11,7 @@ import { pageIn, staggerNormal, revealHero, revealNormal } from '@/shared/animat
 import Link from 'next/link'
 
 export default function LoginPage() {
+  const router = useRouter()
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -19,8 +21,11 @@ export default function LoginPage() {
     setError('')
     const formData = new FormData(e.currentTarget)
     try {
-      const result = await loginClient(formData)
+      const result = await loginClient(formData) as any
       if (result?.error) setError(result.error)
+      if (result?.needsVerification && result?.email) {
+        router.push(`/verify-email?email=${encodeURIComponent(result.email)}`)
+      }
     } catch {}
     finally { setLoading(false) }
   }
